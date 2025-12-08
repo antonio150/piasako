@@ -1,0 +1,128 @@
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light"
+      data-menu-styles="dark" data-toggled="close">
+
+<head>
+
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Title -->
+    <title>{% block title %}{% endblock %} - Visiteur</title>
+
+    <script>
+        function initMenuColorLight() {
+            let localStorage = window.localStorage;
+            if (
+                localStorage.getItem('xintradarktheme') !== 'true'
+                && (!localStorage.getItem('xintraMenu') || localStorage.getItem('xintraMenu') !== 'dark')
+            ) {
+                localStorage.setItem('xintraMenu', 'light');
+            }
+        }
+
+        initMenuColorLight()
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('assets_template/images/brand-logos/favicon.ico') }}" type="image/x-icon">
+
+    <!-- Start::Styles -->
+    {% include('layouts/style.html.twig') %}
+    <!-- End::Styles -->
+
+    {% block block_css %}
+        <style>
+            .vertical-line {
+                width: 1px; /* Largeur de la ligne */
+                height: 75%; /* Hauteur de la ligne */
+                background-color: #ccc; /* Couleur de la ligne */
+            }
+
+            @media (min-width: 1200px) {
+                .container, .container-lg, .container-md, .container-sm, .container-xl {
+                    max-width: 865px;
+                }
+            }
+            .img-fluid {
+                max-width: 115%;
+                height: auto;
+            }
+        </style>
+    {% endblock %}
+    
+    <style>
+        body {
+            background-image: url('{{ asset("img/fond.png") }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        .bg-gray-300 {
+            background-color: transparent !important; 
+        }
+
+        .bg-mode {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+    </style>
+
+</head>
+
+<body class="bg-gray-300">
+
+<!-- Start::main-switcher -->
+{# {% include('layouts/switcher.html.twig') %} #}
+<!-- End::main-switcher -->
+
+<!-- Loader -->
+<div id="loader">
+    <img src="{{ asset('assets_template/images/media/loader.svg') }}" alt="">
+</div>
+<!-- Loader -->
+
+<div class="page mt-0">
+    <!-- Start::app-content -->
+    <div>
+        <div class="container-fluid mt-0">
+
+            {% block body %}
+                <!-- ============================== Login Section ================== -->
+                
+            {% endblock %}
+
+        </div>
+    </div>
+    <!-- End::app-content -->
+
+</div>
+
+<!-- Start::main-scripts -->
+{% include('layouts/script.html.twig') %}
+<!-- End::main-scripts -->
+
+<!-- Sticky JS -->
+<script src="{{ asset('assets_template/js/sticky.js') }}"></script>
+
+<!-- Defaultmenu JS -->
+<script src="{{ asset('assets_template/js/defaultmenu.min.js') }}"></script>
+
+<!-- Custom JS -->
+<script src="{{ asset('assets_template/js/custom.js') }}"></script>
+
+<!-- Custom-Switcher JS -->
+<script src="{{ asset('assets_template/js/custom-switcher.min.js') }}"></script>
+
+{% block block_js %}{% endblock %}
+
+<script src="{{ asset('assets_template/js/show-password.js') }}"></script>
+
+</body>
+
+</html>

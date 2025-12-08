@@ -1,0 +1,103 @@
+{% macro scriptModeView(role) %}
+    {% if app.request.query.get('view') or not is_granted(role) %}
+        <script>
+            const buttons = document.querySelectorAll('._btn_submit');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+        </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro scriptModeSortie(role) %}
+    {% if  not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+            const buttons = document.querySelectorAll('._btn_sortie');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+            }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro scriptModeAffecte(role) %}
+    {% if  not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+            const buttons = document.querySelectorAll('._btn_affecte');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+             }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro scriptModeRetour(role) %}
+    {% if  not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+            const buttons = document.querySelectorAll('._btn_retour');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+            }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro scriptBtnAddDisabled(role) %}
+    {% if  not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+            const buttons = document.querySelectorAll('._btn_add');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+            }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}
+
+{% macro scriptBtnDeleteDisabled(role) %}
+    {% if  not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+            const buttons = document.querySelectorAll('._btn_delete');
+
+            // Ajouter l'attribut 'disabled' à chaque bouton
+            buttons.forEach(button => {
+                button.setAttribute('disabled', 'true');
+            });
+            }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro scriptBtnAdd(role) %}
+    {% if not is_granted(role) %}
+        <script>
+            setTimeout(function() {
+                const buttons = document.querySelectorAll('._btn_insert');
+
+                // Ajouter l'attribut 'disabled' à chaque bouton
+                buttons.forEach(button => {
+                    button.classList.add('d-none');
+                });
+            }, 1000)
+        </script>
+    {% endif %}
+{% endmacro %}

@@ -1,0 +1,73 @@
+
+<!-- Scroll To Top -->
+<div class="scrollToTop">
+    <span class="arrow"><i class="ti ti-arrow-narrow-up fs-20 text-warning"></i></span>
+</div>
+<div id="responsive-overlay"></div>
+<!-- Scroll To Top -->
+
+<!-- Popper JS -->
+<script src="{{ asset('assets_template/libs/@popperjs/core/umd/popper.min.js') }}"></script>
+
+<!-- Bootstrap JS -->
+<script src="{{ asset('assets_template/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Node Waves JS-->
+<script src="{{ asset('assets_template/libs/node-waves/waves.min.js') }}"></script>
+
+<!-- Simplebar JS -->
+<script src="{{ asset('assets_template/libs/simplebar/simplebar.min.js') }}"></script>
+<script src="{{ asset('assets_template/js/simplebar.js') }}"></script>
+
+<!-- Auto Complete JS -->
+<script src="{{ asset('assets_template/libs/@tarekraafat/autocomplete.js/autoComplete.min.js') }}"></script>
+
+<!-- Color Picker JS -->
+<script src="{{ asset('assets_template/libs/@simonwep/pickr/pickr.es5.min.js') }}"></script>
+
+<!-- Date & Time Picker JS -->
+<script src="{{ asset('assets_template/libs/flatpickr/flatpickr.min.js') }}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const input = document.getElementById("header-search");
+        const list = document.getElementById("autoComplete_list_1");
+
+        if (list) {
+            const items = Array.from(list.getElementsByTagName("li"));
+
+            input.addEventListener("input", function () {
+                const searchTerm = input.value.trim().toLowerCase();
+
+                if (!searchTerm) {
+                    list.hidden = true;
+                    return;
+                }
+
+                let hasMatch = false;
+                items.forEach((item) => {
+                    const text = item.textContent.toLowerCase();
+                    const match = text.includes(searchTerm);
+
+                    item.style.display = match ? "block" : "none";
+                    if (match) hasMatch = true;
+                });
+
+                list.hidden = !hasMatch;
+            });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#autoComplete_list_1 li').forEach(li => {
+            li.addEventListener('click', function () {
+                const href = this.getAttribute('data-href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script>
