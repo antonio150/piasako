@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Main;
 
 use App\Entity\Main\Site;
 use App\Form\SiteForm;
@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/site')]
 final class SiteController extends AbstractController
 {
     private function form(
@@ -58,7 +59,7 @@ final class SiteController extends AbstractController
         ]);
     }
 
-    #[Route('/', name: 'app_home', methods: ['GET'])]
+    #[Route('/', name: 'app_site_index', methods: ['GET'])]
     public function index(
         Request                $request,
         EntityManagerInterface $entityManager): Response

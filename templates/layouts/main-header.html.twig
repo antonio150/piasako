@@ -96,7 +96,7 @@
 				<a href="javascript:void(0);" class="header-link dropdown-toggle" id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 					<div class="d-flex align-items-center">
 						<div>
-							<img src="{{ asset('img/user.png') }}" alt="img" class="avatar avatar-sm">
+							<i class="bi bi-person-circle header-link-icon d-flex"></i>
 						</div>
 					</div>
 				</a>
@@ -109,7 +109,7 @@
                         </a>
 					</li>
 					<li>
-						<a class="dropdown-item d-flex align-items-center" href="#" title="Se déconnecter : {{ app.user.nomagent|default('') }}">
+						<a class="dropdown-item d-flex align-items-center" href="{{path('app_logout')}}" title="Se déconnecter : {{ app.user.nomagent|default('') }}">
 							<i class="fe fe-lock p-1 rounded-circle bg-primary-transparent ut me-2 fs-16"></i>
 							Déconnexion
 						</a>

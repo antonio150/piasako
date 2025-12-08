@@ -292,7 +292,7 @@
     {% include('layouts/footer.html.twig') %}
     <!-- End::main-footer -->
 
-    {% if app.user and not app.user.site and app.request.attributes.get('_route') not in __pathIgnoreSite %}
+    
         <!-- Modal BLOCAQUAGE SITE -->
         <div class="modal fade" id="_alertModalSite" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
              aria-labelledby="alertModalLabel" aria-hidden="true">
@@ -308,28 +308,21 @@
                     </div>
 
                     <div class="modal-footer">
-                        {% if is_granted("ROLE_LISTE_UTILISATEUR_Lecture") %}
-                            <a href="{{ path('app_espace_admin_administration_user_index') }}" class="btn btn-primary">Gérer
+                       
+                            <a href="#" class="btn btn-primary">Gérer
                                 les utilisateurs</a>
-                        {% endif %}
+                        
                         <a href="{{ path('app_logout') }}" class="btn btn-warning">Se déconnecter</a>
                     </div>
 
                 </div>
             </div>
         </div>
-    {% endif %}
+
 
 </div>
 
-{% if app.user and not app.user.site and app.request.attributes.get('_route') not in __pathIgnoreSite %}
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const myModal = new bootstrap.Modal(document.getElementById('_alertModalSite'));
-            myModal.show();
-        });
-    </script>
-{% endif %}
+
 
 {# CONVERT DATE VERS HEURE LOCAL CLIENT #}
 <script>

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Main;
 
 use App\Repository\SuperUserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: SuperUserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class SuperUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\Column(length: 180)]
     private ?string $email = null;
@@ -30,6 +30,14 @@ class SuperUser implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column( type: 'boolean', nullable: false)]
+    private bool $estActif = true;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4()->toRfc4122();
+    }
 
     public function getId(): ?int
     {
@@ -110,5 +118,16 @@ class SuperUser implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function isestActif(): bool
+    {
+        return $this->estActif;
+    }
+
+    public function setestActif(bool $estActif): static
+    {
+        $this->estActif = $estActif;
+        return $this;
     }
 }
