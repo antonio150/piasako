@@ -262,6 +262,7 @@ class DatabaseSwitcher
                 'password' => $siteBddMdp,
                 'charset' => $charset,
             ]);
+         
             // Exécuter une requête simple pour vérifier l'accès
             $testConnection->executeQuery('SELECT 1');
             $databaseExistsWithUser = true;
@@ -271,6 +272,8 @@ class DatabaseSwitcher
             $newUrl = "mysql://".rawurlencode($siteBddUser).":".rawurlencode($siteBddMdp)."@".$params['host'].":".$port."/".$databaseName."?serverVersion=".$serverVersion."&charset=".$charset;
             
         } catch (\Exception $e) {
+
+            dump($e);
            
             $newUrl = $_ENV['DATABASE_URL_DYNAMIC_MYSQL'] ?? getenv('DATABASE_URL_DYNAMIC_MYSQL');
            
@@ -289,8 +292,10 @@ class DatabaseSwitcher
             [__DIR__ . '/../Entity/Dynamic'], // 📌 Chemin des entités
             true
         );
-        $newConnection = DriverManager::getConnection($params);
+        $newConnection = DriverManager::getConnection( $testConnection->getParams());
         $newEntityManager = new EntityManager($newConnection, $config);
+
+       
         
         // 🔄 Mettre à jour l'EntityManager courant
         $this->entityManager = $newEntityManager;

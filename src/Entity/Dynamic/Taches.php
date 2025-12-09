@@ -2,34 +2,7 @@
 
 namespace App\Entity\Dynamic;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use App\Controller\Dynamic\Personne\ListeElementParametreController;
-use App\Controller\Dynamic\Rapport\ListeTachesPlanifiesByTacheController;
-use App\Controller\Dynamic\Rapport\RapportParTachesController;
-use App\Controller\Dynamic\Rapport\RapportParTachesPlanifierController;
-use App\Controller\Dynamic\Rapport\RapportTachePlanifieController;
-use App\Controller\Dynamic\Site\ListTimePauseController;
-use App\Controller\Dynamic\Site\UpdateSiteDynamicController;
-use App\Controller\Dynamic\Tache\CreateTachesController;
-use App\Controller\Dynamic\Tache\DeleteTachesController;
-use App\Controller\Dynamic\Tache\GetAllActiveTachesController;
-use App\Controller\Dynamic\Tache\GetTachesAyantTachePlanifierEncoursController;
-use App\Controller\Dynamic\Tache\ListePersonnesByTacheController;
-use App\Controller\Dynamic\Tache\ListeTachesAvanceeController;
-use App\Controller\Dynamic\Tache\ListeTachesController;
-use App\Controller\Dynamic\Tache\ListeTachesMobileController;
-use App\Controller\Dynamic\Tache\ListeTravailleurAssignerTachesController;
-use App\Controller\Dynamic\Tache\OneTachesController;
-use App\Controller\Dynamic\Tache\RapportTacheController;
-use App\Controller\Dynamic\Tache\RapportTacheExportController;
-use App\Controller\Dynamic\Tache\RemoveTachesController;
-use App\Controller\Dynamic\Tache\UpdateTachesController;
-use App\Controller\Dynamic\Tache\UtilsTachesController;
+
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,10 +14,6 @@ use Symfony\Component\Uid\Uuid;
  * Taches
  */
 #[ORM\Table(name: 'taches')]
-#[ORM\Index(name: 'WDIDX_Taches_TAC_Inactif', columns: ['TAC_Inactif'])]
-#[ORM\Index(name: 'WDIDX_Taches_TAC_Nom', columns: ['TAC_Nom'])]
-#[ORM\Index(name: 'WDIDX_Taches_ID_Taches_Priorites', columns: ['ID_Taches_Priorites'])]
-#[ORM\Index(name: 'WDIDX_Taches_ID_Taches_Type', columns: ['ID_Taches_Type'])]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 
@@ -75,8 +44,8 @@ class Taches
     #[ORM\Column(name: 'TAC_Budget', type: 'decimal', precision: 24, scale: 6, nullable: false, options: ['default' => '0.000000'])]
     private ?float $tacBudget = 0.0;
 
-    #[ORM\Column(name: 'TAC_Inactif', type: 'boolean', nullable: false)]
-    private ?bool $tacInactif = false;
+    #[ORM\Column(name: 'TAC_actif', type: 'boolean', nullable: false)]
+    private ?bool $estActif = true;
 
     #[ORM\Column(name: 'TAC_DATE_PREVISION', type: 'datetime', nullable: true)]
     private ?\DateTime $datePrevision;
@@ -189,14 +158,14 @@ class Taches
         return $this;
     }
 
-    public function isTacInactif(): ?bool
+    public function isestActif(): ?bool
     {
-        return $this->tacInactif;
+        return $this->estActif;
     }
 
-    public function setTacInactif(bool $tacInactif): self
+    public function setestActif(bool $estActif): self
     {
-        $this->tacInactif = $tacInactif;
+        $this->estActif = $estActif;
         return $this;
     }
 

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-theme-mode="light" data-header-styles="light"
+      data-menu-styles="dark" data-toggled="close">
+
+<head>
+
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Title -->
+    <title>{% block title %}{% endblock %}</title>
+
+    <script>
+        function initMenuColorLight() {
+            let localStorage = window.localStorage;
+            if (
+                localStorage.getItem('xintradarktheme') !== 'true'
+                && (!localStorage.getItem('xintraMenu') || localStorage.getItem('xintraMenu') !== 'dark')
+            ) {
+                localStorage.setItem('xintraMenu', 'light');
+            }
+        }
+
+        initMenuColorLight()
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('assets_template/images/brand-logos/favicon.ico') }}" type="image/x-icon">
+
+    <!-- Start::Styles -->
+    {% include('layouts/style.html.twig') %}
+    <!-- End::Styles -->
+
+    {% block block_css %}{% endblock %}
+
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        .li_favoris {
+            margin-right: 9px
+        }
+
+        .link_favoris {
+            padding-left: 5px;
+            padding-right: 5px;
+
+            max-width: 42px;
+            min-width: 42px;
+        }
+
+        .bar {
+            width: 1px;
+            height: 23px;
+            background-color: #ccc;
+        }
+
+        .btn-success-show {
+            border: 1px solid rgba(var(--success-rgb), 0.3) !important;
+        }
+
+        .custom-tooltip {
+            box-shadow: 0px 4px 6px rgba(77, 76, 76, 0.1),
+            -4px 6px 8px rgba(80, 79, 79, 0.1),
+            4px -4px 6px rgba(0, 0, 0, 0.1),
+            -2px -4px 6px rgba(99, 97, 97, 0.1) !important;
+            border-radius: 5px !important;
+            z-index: 1000 !important;
+            width: 400px !important;
+        }
+
+        .custom-tooltip .tooltip-inner {
+            max-width: 400px !important;
+            background-color: white !important;
+            color: black !important;
+            border-radius: 5px !important;
+        }
+
+        .custom-tooltip .tooltip-arrow {
+            display: none !important;
+        }
+
+        .custom-form-control-readonly {
+            background-color: #f0f0f0 !important;
+        }
+
+        .custom-input-prix {
+            padding: .375rem .4rem !important;
+        }
+
+        .form-control:disabled, .form-select:disabled {
+            background-color: #fff !important;
+            color: var(--default-text-color);
+        }
+
+        .custom-form-control {
+            height: 38.39px;
+        }
+
+        .custom-btn-add {
+            border-radius: 3px !important;
+        }
+
+        .form-textarea-control {
+            min-height: 40px;
+            height: 40px;
+            resize: none;
+            overflow: hidden;
+            transition: height 0.2s ease;
+            max-height: 89px !important;
+        }
+
+        .date-input-custom {
+            color: initial;
+            position: relative;
+        }
+
+        .date-input-custom.empty::-webkit-datetime-edit {
+            color: transparent;
+        }
+
+        .date-input-custom.empty::-moz-placeholder {
+            color: transparent;
+        }
+
+        /* Garder l'icône visible */
+        .date-input-custom::-webkit-calendar-picker-indicator {
+            opacity: 1;
+        }
+
+        .date-input-custom::-moz-calendar-picker-indicator {
+            opacity: 1;
+        }
+
+        /* =============== LARGEUR MENU SUR MAIN-SEDEBAR ============== */
+        .custom-height-menu-sidebar {
+            height: 38px !important;
+        }
+
+        /* ============================================================ */
+
+        /* ================ SELECT2 =============== */
+
+        .select-with-icon {
+            position: relative;
+        }
+
+        .select-with-icon .icon-left {
+            position: absolute;
+            top: 70%;
+            right: 12px;
+            transform: translateY(-50%);
+            z-index: 1;
+            text-align: right;
+            font-size: 18px;
+            color: var(--default-text-color);
+        }
+
+        .select-with-icon .form-select {
+            padding-left: 35px;
+        }
+
+        button[disabled], a[disabled] {
+            cursor: not-allowed !important;
+        }
+
+        .custom-text-span {
+            color: #FB5454 !important;
+        }
+
+        .color-background {
+            background: linear-gradient(to bottom, rgba(243, 149, 17, 0.49) 0px, var(--custom-white) 200px);
+        }
+
+        .btn-fixed-width {
+            width: 169px;
+            text-align: center;
+            display: flex; /* Utiliser flexbox */
+            align-items: center; /* Centrer verticalement */
+            justify-content: center; /* Centrer horizontalement */
+            padding: 0.375rem 0.75rem; /* Padding uniforme pour l'apparence */
+            line-height: 1.5; /* Hauteur de ligne pour éviter les décalages */
+            height: 38px; /* Hauteur fixe pour aligner avec les autres éléments */
+            box-sizing: border-box; /* Inclure padding dans la largeur/hauteur */
+        }
+
+        .btn-custom-yellow {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .btn-custom-yellow:hover:not(:disabled) {
+            background-color: #ffeeba;
+            color: #856404;
+        }
+
+        .btn-custom-green {
+            background-color: rgba(43, 174, 28, 0.21);
+            color: rgb(43, 174, 28);
+        }
+
+        .btn-custom-green:hover:not(:disabled) {
+            background-color: rgba(43, 174, 28, 0.21);
+            color: rgb(8, 9, 7);
+        }
+
+        .btn-custom-blue {
+            background-color: rgba(16, 193, 247, 0.21);
+            color: rgb(16, 193, 247);
+        }
+
+        .btn-custom-blue:hover:not(:disabled) {
+            background-color: rgba(16, 193, 247, 0.21);
+            color: rgb(16, 193, 247);
+        }
+
+        .btn-custom-purple {
+            background-color: rgba(100, 25, 129, 0.21);
+            color: rgb(177, 43, 230);
+        }
+
+        .btn-custom-purple:hover:not(:disabled) {
+            background-color: rgba(100, 25, 129, 0.21);
+            color: rgb(177, 43, 230);
+        }
+
+        .btn.border.border-dark {
+            border: 1px solid rgb(var(--dark-rgb), 0.2) !important;
+            opacity: 1;
+            border-radius: 8px !important;
+        }
+
+        .dataTables_wrapper .bottom {
+            position: static !important;
+        }
+
+    </style>
+
+    <style>
+        .table-responsive {
+            max-height: calc(100vh - 260px);
+            overflow-y: scroll !important;
+            scrollbar-gutter: stable;
+        }
+
+        .responsive-input-search {
+            min-width: inherit !important;
+        }
+
+        @media (max-width: 767.98px) {
+            .responsive-input-search {
+                min-width: inherit !important;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+{% set default_vehicle_image = asset('img/default_vehicle.jpg') %}
+<body class="color-background">
+
+<div class="page">
+
+    <!-- Start::main-header -->
+    {% include('layouts/main-header.html.twig') %}
+    <!-- End::main-header -->
+
+    <!-- Start::main-sidebar -->
+    {% include('layouts/dynamic-sidebar.html.twig') %}
+    <!-- End::main-sidebar -->
+
+    <!-- Start::app-content -->
+    <div class=" main-content app-content">
+        <div class="container-fluid">
+            <!-- Loader -->
+            <div id="__loader_main">
+                <div id="__loader">
+                    <div class="text-center">
+                        <img src="{{ asset('img/loader.gif') }}" class="__loader_img">
+                    </div>
+                </div>
+
+                <div style="height: 200vh"></div>
+            </div>
+            <!-- Loader -->
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+    <!-- End::app-content -->
+
+    <!-- Start::main-footer -->
+    {% include('layouts/footer.html.twig') %}
+    <!-- End::main-footer -->
+
+    
+        <!-- Modal BLOCAQUAGE SITE -->
+        <div class="modal fade" id="_alertModalSite" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+             aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">Action requise</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        Veuillez ajouter un site à cet utilisateur ou contacter l'administrateur.
+                    </div>
+
+                    <div class="modal-footer">
+                       
+                            <a href="#" class="btn btn-primary">Gérer
+                                les utilisateurs</a>
+                        
+                        <a href="{{ path('app_logout') }}" class="btn btn-warning">Se déconnecter</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+
+{# CONVERT DATE VERS HEURE LOCAL CLIENT #}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fonction pour formater une date au format "dd/mm/yyyy" et une heure au format "hh:ii"
+        function formatDateAndTime(dateString) {
+            const date = new Date(dateString);
+            const optionsDate = {day: '2-digit', month: '2-digit', year: 'numeric'};
+            const optionsTime = {hour: '2-digit', minute: '2-digit', hour12: false};
+
+            const formattedDate = date.toLocaleDateString('fr-FR', optionsDate);
+            const formattedTime = date.toLocaleTimeString('fr-FR', optionsTime);
+
+            return {formattedDate, formattedTime};
+        }
+
+        // Parcours de toutes les spans avec la classe "_convert_date"
+        const dateElements = document.querySelectorAll('span._convert_date');
+        dateElements.forEach(span => {
+            const dateString = span.textContent.trim(); // Récupère la date au format 'c' de Twig
+            const {formattedDate} = formatDateAndTime(dateString);
+            span.textContent = formattedDate; // Met à jour le texte avec la date formatée
+        });
+
+        // Parcours de toutes les spans avec la classe "_convert_time"
+        const timeElements = document.querySelectorAll('span._convert_time');
+        timeElements.forEach(span => {
+            const dateString = span.textContent.trim(); // Récupère la date au format 'c' de Twig
+            const {formattedTime} = formatDateAndTime(dateString);
+            span.textContent = formattedTime; // Met à jour le texte avec l'heure formatée
+        });
+    });
+</script>
+
+<!-- Start::main-scripts -->
+{% include('layouts/script.html.twig') %}
+<!-- End::main-scripts -->
+
+<!-- Sticky JS -->
+<script src="{{ asset('assets_template/js/sticky.js') }}"></script>
+
+<!-- Defaultmenu JS -->
+<script src="{{ asset('assets_template/js/defaultmenu.min.js') }}"></script>
+
+<!-- Custom JS -->
+<script src="{{ asset('assets_template/js/custom.js') }}"></script>
+
+<!-- Custom-Switcher JS -->
+<script src="{{ asset('assets_template/js/custom-switcher.min.js') }}"></script>
+
+{% block block_js %}{% endblock %}
+
+{# SCRIPT ACTIVE MENU #}
+<script>
+    // Récupérer l'URL actuelle
+    const currentUrl = window.location.pathname;
+
+    // Sélectionner tous les liens du menu
+    const menuItems = document.querySelectorAll("a.side-menu__item");
+
+    // Parcourir tous les liens
+    menuItems.forEach(item => {
+        // Vérifier si l'URL de l'attribut href est incluse dans l'URL actuelle
+        if (currentUrl.includes(item.getAttribute("href"))) {
+            // Ajouter la classe 'active' au lien correspondant
+            item.classList.add("active");
+
+            // Récupérer le parent (menu) si présent
+            const parentSlide = item.closest(".has-sub");
+            if (parentSlide) {
+                // Ajouter les classes nécessaires au parent
+                parentSlide.classList.add("open", "active");
+
+                // Assurer que le sous-menu est visible
+                const subMenu = parentSlide.querySelector(".slide-menu");
+                if (subMenu) {
+                    subMenu.style.display = "block"; // Forcer l'affichage du sous-menu
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    window.onload = function () {
+        // Cacher le div une fois que tout est chargé
+        document.getElementById('__loader_main').style.display = 'none';
+    };
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tooltipInformations = document.querySelectorAll('#tooltipInformations');
+        tooltipInformations.forEach(tooltipTriggerEl => {
+            const contentId = tooltipTriggerEl.getAttribute("data-bs-title");
+            const tooltipContent = document.getElementById(contentId)?.innerHTML || "Aucune information";
+
+            new bootstrap.Tooltip(tooltipTriggerEl, {
+                title: tooltipContent,
+                html: true,
+                sanitize: false,
+                placement: "bottom",
+                customClass: "custom-tooltip",
+                popperConfig: {
+                    modifiers: [
+                        {
+                            name: 'preventOverflow',
+                            options: {
+                                boundary: 'viewport',
+                            },
+                        },
+                        {
+                            name: 'offset',
+                            options: {
+                                offset: [200, 2]
+                            }
+                        }
+                    ]
+                }
+
+            });
+        });
+    });
+</script>
+
+<!-- AJUSTER LA TAILLES DE LA TEXTAREA -->
+<script>
+    function adjustTextareaHeight(textarea) {
+
+        let heightTextArea = textarea.scrollHeight;
+        textarea.style.height = '40px';
+        textarea.style.minHeight = '40px';
+
+        if (!textarea.value) return;
+
+        textarea.style.overflowY = 'hidden';
+
+        // Cas d'une seule ligne
+        if (heightTextArea < 56 && heightTextArea > 38) {
+            return;
+        }
+
+        // Cas de deux lignes
+        if (heightTextArea < 78 && heightTextArea > 56) {
+            heightTextArea = 56;
+        }
+
+        // Appliquer la logique d'incrémentation de 22 à partir de 78
+        if (heightTextArea >= 78) {
+            heightTextArea = 78 + Math.floor((heightTextArea - 78) / 22) * 22;
+        }
+
+        if (heightTextArea > 40) textarea.style.minHeight = heightTextArea + 'px';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const textareas = document.querySelectorAll('.form-textarea-control');
+        const send_email_remarqueInput = document.querySelector('#send_email_remarque');
+
+        // Add modal show event listener
+        const modal = document.querySelector('.modalAyantTextarea'); // adjust selector to match your modal
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                // Get textareas only inside this specific modal
+                const modalTextareas = modal.querySelectorAll('.form-textarea-control');
+
+                modalTextareas.forEach(textarea => {
+                    textarea.style.height = 'auto';
+                    adjustTextareaHeight(textarea);
+                });
+            });
+        }
+
+        textareas.forEach(textarea => {
+            // Initial adjustment with setTimeout
+            adjustTextareaHeight(textarea);
+
+            textarea.addEventListener('input', function () {
+                adjustTextareaHeight(this);
+            });
+        });
+    });
+</script>
+
+<!-- =============== PLACEHOLDER DES CHAMP TYPE DATE TRANSPARENT ============== -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+
+        dateInputs.forEach(input => {
+            // Ajout d'une classe CSS personnalisée
+            input.classList.add('date-input-custom');
+
+            input.addEventListener('input', function () {
+                if (this.value) {
+                    this.classList.remove('empty');
+                } else {
+                    this.classList.add('empty');
+                }
+            });
+
+            input.addEventListener('keyup', function () {
+                this.classList.remove('empty');
+            })
+
+            // Initialisation de l'état
+            if (!input.value) {
+                input.classList.add('empty');
+            }
+        });
+    });
+</script>
+
+<script>
+    // Masquer les messages flash après 3 secondes (3000 ms)
+    setTimeout(() => {
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(el => {
+            el.style.transition = "opacity 0.5s ease-out";
+            el.style.opacity = 0;
+
+            // Supprimer complètement après le fondu
+            setTimeout(() => el.remove(), 500);
+        });
+    }, 3000);
+</script>
+
+{% if is_granted("ROLE_SUPER_ADMIN") %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Récupérer le chemin actuel
+            const currentPath = window.location.pathname;
+
+            // Sélectionner tous les éléments li.slide
+            const menuItems = document.querySelectorAll('.main-menu ul li.slide');
+
+            // Retirer toutes les classes active et open
+            menuItems.forEach(function (item) {
+                item.classList.remove('open', 'active');
+                const link = item.querySelector('a');
+                if (link) {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Vérifier si nous sommes sur la page d'édition d'un client
+            const isClientEditPage = currentPath.includes('/super-admin/client/') && currentPath.includes('/edit');
+
+            // Ajouter les classes aux éléments correspondants
+            menuItems.forEach(function (item) {
+                const link = item.querySelector('a');
+                if (link) {
+                    const href = link.getAttribute('href');
+
+                    // Si le lien correspond exactement au chemin actuel
+                    if (href === currentPath) {
+                        item.classList.add('open', 'active');
+                        link.classList.add('active');
+                    }
+                    // Si nous sommes sur la page d'édition et que c'est le lien "Client"
+                    else if (isClientEditPage && href === '/super-admin/client') {
+                        item.classList.add('open', 'active');
+                        link.classList.add('active');
+                    }
+                }
+            });
+        });
+
+    </script>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        {% set _titreAlert = "Confirmation" %}
+
+        {% if label == "error" %}
+            {% set _titreAlert = "Erreur" %}
+        {% endif %}
+
+        <script>
+            //----------------------------------MESSAGE FLASH --------------------------------------
+            window.addEventListener('load', function() {
+                Swal.fire({
+                    icon: '{{ label }}',  // Icône d'erreur
+                    title: '<span style="font-size: 11px !important;">{{ _titreAlert }}</span>',
+                    text: "{{ message|nl2br }}",  // Texte d'erreur
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 5000,
+                    timerProgressBar: true
+                });
+            });
+        </script>
+    {% endfor %}
+{% endfor %}
+
+</body>
+
+</html>

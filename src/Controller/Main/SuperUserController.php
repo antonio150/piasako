@@ -34,7 +34,7 @@ final class SuperUserController extends AbstractController
             'estActif' => $estActif
         ]);
 
-        return $this->render('super_admin/index.html.twig', [
+        return $this->render('espace_admin/super_admin/index.html.twig', [
             'users' => $users,
             'estActif' => $estActif
         ]);
@@ -80,7 +80,7 @@ final class SuperUserController extends AbstractController
             return $this->redirectToRoute('app_superuser_index', ['__eActif' => $user->isEstActif()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('super_admin/form.html.twig', [
+        return $this->render('espace_admin/super_admin/form.html.twig', [
             'user' => $user,
             'form' => $form,
             'fromProfile' => false,
@@ -147,7 +147,7 @@ final class SuperUserController extends AbstractController
             return $this->redirectToRoute('app_superuser_index', ['__eActif' => $user->isEstActif()], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('super_admin/form.html.twig', [
+        return $this->render('espace_admin/super_admin/form.html.twig', [
             'user' => $user,
             'form' => $form,
             'isOwnProfile' => $isOwnProfile,

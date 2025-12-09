@@ -1,0 +1,111 @@
+<aside
+        class="app-sidebar sticky" id="sidebar">
+    <!-- Start::main-sidebar-header -->
+    <div class="main-sidebar-header">
+        <a href="{{ path('app_home') }}" class="header-logo">
+            <img src="{{ asset('assets_template/images/brand-logos/desktop-logo.png') }}" alt="logo"
+                 class="desktop-logo">
+            <img src="{{ asset('assets_template/images/brand-logos/toggle-dark.png') }}" alt="logo" class="toggle-dark">
+            <img src="{{ asset('assets_template/images/brand-logos/desktop-dark.png') }}" alt="logo"
+                 class="desktop-dark">
+            <img src="{{ asset('assets_template/images/brand-logos/toggle-logo.png') }}" alt="logo" class="toggle-logo">
+            <img src="{{ asset('assets_template/images/brand-logos/toggle-white.png') }}" alt="logo"
+                 class="toggle-white">
+            <img src="{{ asset('assets_template/images/brand-logos/desktop-white.png') }}" alt="logo"
+                 class="desktop-white">
+        </a>
+    </div>
+    <!-- End::main-sidebar-header -->
+    <!-- Start::main-sidebar -->
+    <div
+            class="main-sidebar" id="sidebar-scroll">
+        <!-- Start::nav -->
+        <nav class="main-menu-container nav nav-pills flex-column sub-open">
+            <div class="slide-left" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewbox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                </svg>
+            </div>
+            <ul class="main-menu">
+                <!-- Start::slide dashboard -->
+             
+                    
+              
+                    <ul style="list-style: none; margin: 0; padding: 0;">
+                        <li class="slide has-sub">
+                            <a href="{{path('app_site_index')}}"
+                               class="side-menu__item custom-height-menu-sidebar">
+                                <i class="ti ti-building fs-5"></i>
+                                <span class="side-menu__label">&nbsp;&nbsp;  Tableau de bord</span>
+                            </a>
+                        </li>
+                    </ul>
+             
+
+                <ul style="list-style: none; margin: 0; padding: 0;">
+                    <li class="slide has-sub">
+                        <a href="{{path('app_superuser_index')}}"
+                           class="side-menu__item custom-height-menu-sidebar">
+                            <i class="ti ti-id-badge-2 fs-5"></i>
+                            <span class="side-menu__label">&nbsp;&nbsp;  Travailleur</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <li class="slide has-sub">
+                        <a href="javascript:void(0);" class="side-menu__item custom-height-menu-sidebar">
+                            <i class="ti ti-home fs-5"></i>
+                            <span class="side-menu__label">&nbsp;&nbsp;  Taches</span>
+                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+                        </a>
+                        <ul class="slide-menu child1">
+                           
+                            <li class="slide">
+                                <a href="{{ path('app_espace_admin_dashboard') }}" class="side-menu__item">
+                                    Liste
+                                </a>
+                            </li>
+                           
+                            <li class="slide">
+                                <a href="{{ path('app_admin_historique_point_index') }}" class="side-menu__item">
+                                    Planification
+                                </a>
+                            </li>
+                           
+                            <li class="slide">
+                                <a href="{{ path('app_espace_admin_dashboard_derogation_index') }}" id="clear-localstorage-derogation" class="side-menu__item">
+                                    Dérogations
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </li>
+              
+               
+             
+            </ul>
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewbox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                </svg>
+            </div>
+        </nav>
+        <!-- End::nav -->
+    </div>
+    <!-- End::main-sidebar -->
+</aside>
+{% block block_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    // Ciblage du lien "Dérogations"
+    const derogationLink = document.getElementById('clear-localstorage-derogation');
+    
+    if (derogationLink) {
+        derogationLink.addEventListener('click', function (event) {
+            // Vider le localStorage avant de suivre le lien
+            localStorage.clear();
+        });
+    }
+});
+</script>
+{% endblock %}
