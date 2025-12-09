@@ -44,34 +44,34 @@ class Site
 {
     use TimestampableTrait;
     #[ORM\Id]
-    #[ORM\Column(name: 'ID_Site', unique: true, type: 'string', nullable: false)]
+    #[ORM\Column(name: 'ID_Site', unique: true, type: 'string', length: 36, nullable: false)]
     private ?string $id = null;
 
-    #[ORM\Column(name: 'SIT_RaisonSociale', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_RaisonSociale', type: 'string', length: 255, nullable: false)]
     private string $sitRaisonsociale;
 
-    #[ORM\Column(name: 'SIT_Adresse', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_Adresse', type: 'string', length: 255, nullable: false)]
     private string $sitAdresse;
 
-    #[ORM\Column(name: 'SIT_Tel', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_Tel', type: 'string', length: 30, nullable: false)]
     private string $sitTel;
 
-    #[ORM\Column(name: 'SIT_Mail', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_Mail', type: 'string', length: 255, nullable: false)]
     private string $sitMail;
 
-    #[ORM\Column(name: 'SIT_Code', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_Code', type: 'string', length: 50, nullable: false)]
     private string $sitCode;
 
     #[Assert\File(mimeTypes: ['image/jpeg', 'image/png', 'image/gif'])]
     private ?File $logoFile = null;
 
-    #[ORM\Column(name: 'SIT_BDD_Nom', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_BDD_Nom', type: 'string', length: 100, nullable: false)]
     private string $sitBddNom;
 
-    #[ORM\Column(name: 'SIT_BDD_User', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_BDD_User', type: 'string', length: 100, nullable: false)]
     private string $sitBddUser;
 
-    #[ORM\Column(name: 'SIT_BDD_Mdp', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'SIT_BDD_Mdp', type: 'string', length: 100, nullable: false)]
     private string $sitBddMdp;
 
     #[ORM\Column(name: 'SIT_Actif', type: 'boolean', nullable: false)]

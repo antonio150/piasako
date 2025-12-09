@@ -39,7 +39,7 @@ class SuperUser implements UserInterface, PasswordAuthenticatedUserInterface
         $this->id = Uuid::v4()->toRfc4122();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -130,4 +130,24 @@ class SuperUser implements UserInterface, PasswordAuthenticatedUserInterface
         $this->estActif = $estActif;
         return $this;
     }
+
+    public function getRoleString(): ?string
+    {
+        $arrayRoles = $this->roles;
+
+        $_role = '';
+        foreach ($arrayRoles as $role) {
+            if ($role == "ROLE_ADMIN") {
+                $_role = "Admin";
+            } else if ($role == "ROLE_USER") {
+                $_role = 'User';
+            } else {
+                $_role = $role;
+            }
+        }
+
+        return $_role;
+    }
+
+    
 }
