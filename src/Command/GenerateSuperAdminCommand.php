@@ -31,7 +31,7 @@ class GenerateSuperAdminCommand extends Command
         $entityManager = $this->entityManager;
         $userPasswordHasher = $this->userPasswordHasher;
 
-        $adminUsername = "admin";
+        $adminUsername = "admin@mail.com";
         $adminPswd = "Admin@CIMAF24!";
 
         $userAdmin = $entityManager->getRepository(SuperUser::class)->findOneBy([

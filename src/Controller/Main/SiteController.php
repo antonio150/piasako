@@ -4,6 +4,7 @@ namespace App\Controller\Main;
 
 use App\Entity\Main\Site;
 use App\Form\SiteForm;
+use App\Service\DatabaseSwitcher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/site')]
 final class SiteController extends AbstractController
 {
+    private DatabaseSwitcher $databaseSwitcher;
+    public function __construct(
+        DatabaseSwitcher $databaseSwitcher,
+    )
+    {
+        $this->databaseSwitcher = $databaseSwitcher;
+    }
+    
     private function form(
         Request                $request,
         Site                  $site,
@@ -29,21 +38,44 @@ final class SiteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $sitRaison = $site->getSitRaisonsociale();            
+            $sitAdress = $site->getSitAdresse();            
+            $sitTel = $site->getSitTel();            
+            $sitMail = $site->getSitMail();            
+            $sitCode = $site->getSitCode();            
+            $sitBddNom = $site->getSitBddNom();            
+            $sitBddUser = $site->getSitBddUser();            
+            $sitBddMdp = $site->getSitBddMdp();  
             
-            // Check if designation already exists
-            $existingSite = $entityManager->getRepository(Site::class)
-                ->findOneBy(['sitRaisonsociale' => $site->getSitRaisonsociale()]);
-
-            if ($existingSite && $existingSite->getId() !== $site->getId()) {
-                $form->get('sitRaisonsociale')->addError(
-                    new \Symfony\Component\Form\FormError('Cette désignation existe déjà.')
-                );
+            // 1. Vérifs éventuelles (à adapter si utile)
+            $errors = [];
+            $existingSitBddNom = $entityManager->getRepository(Site::class)
+                ->findOneBy(['sitBddNom' => $sitBddNom]);
+            if ($existingSitBddNom && $existingSitBddNom->getId() !== $site->getId()) {
+                $errors[] = "nom de base de données";
+            }
+            $existingRaisonsociale = $entityManager->getRepository(Site::class)->findOneBy(['sitRaisonsociale' => $sitRaison]);
+            if ($existingRaisonsociale && $existingRaisonsociale->getId() !== $site->getId()) {
+                $errors[] = "raison sociale";
+            }
+            $existingSitMail = $entityManager->getRepository(Site::class)->findOneBy(['sitMail' => $sitMail ?? null]);
+            if ($existingSitMail && $existingSitMail->getId() !== $site->getId()) {
+                $errors[] = "adresse mail";
+            }
+            $existingSitCode =  $entityManager->getRepository(Site::class)->findOneBy(['sitCode' => $sitCode ?? null]);
+            if ($existingSitCode && $existingSitCode->getId() !== $site->getId()) {
+                $errors[] = "code de site";
+            }
+            if (!empty($errors)) {
+                $this->addFlash('error', 'Les valeurs suivantes existent déjà : ' . implode(', ', $errors));
                 return $this->render('espace_admin/site/form.html.twig', [
                     'site' => $site,
                     'form' => $form->createView(),
                     'isView' => false,
                 ]);
             }
+        
+            $this->databaseSwitcher->createDatabase($sitBddNom, $sitBddUser, $sitBddMdp);
 
 
             $entityManager->persist($site);
