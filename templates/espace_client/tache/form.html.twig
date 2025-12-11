@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_dynamic.html.twig' %}
 
 {% import "components/_informations.html.twig" as macros_information %}
 
 {% block title %}
-    {{ isView ? 'Voir Site' : (site.id ? 'Modifier Site' : 'Nouveau Site') }}
+    {{ isView ? 'Voir Taches' : (taches.id ? 'Modifier Tache' : 'Nouveau Tache') }}
 {% endblock %}
 
 {% block block_css %}
@@ -26,14 +26,8 @@
                     <div class="row align-items-center mt-2">
                         <div class="col-md-4">
                             <div class="d-flex align-items-center justify-content-start gap-3">
-                                <h3 class="mb-0">Site</h3>
-                                {% if site.id %}
-                                    {{ macros_information.renderInformation(
-                                        site.createdAt,
-                                        site.updatedAt,
-                                       
-                                    ) }}
-                                {% endif %}
+                                <h3 class="mb-0">Tache</h3>
+                              
                             </div>
                         </div>
                         
@@ -61,55 +55,86 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
-                                        {{ form_label(form.sitRaisonsociale, 'Raison sociale', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitRaisonsociale, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitRaisonsociale) }}
+                                        {{ form_label(form.tacNom, 'Nom', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacNom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacNom) }}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.sitAdresse, 'Adresse', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitAdresse, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitAdresse) }}
+                                        {{ form_label(form.tacDescription, 'Déscription', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacDescription, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacDescription) }}
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.sitTel, 'Téléphone', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitTel, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitTel) }}
+                                        {{ form_label(form.tacNbtravailleurrequis, 'Travailleur réquis', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacNbtravailleurrequis, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacNbtravailleurrequis) }}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.sitMail, 'Email', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitMail, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitMail) }}
+                                        {{ form_label(form.tacDureeestimatif, 'Durée éstimative', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacDureeestimatif, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacDureeestimatif) }}
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.sitCode, 'Code', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitCode, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitCode) }}
+                                        {{ form_label(form.tacBudget, 'Budget', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacBudget, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacBudget) }}
                                     </div>
                                 </div>
                                 <div class="row">
 
                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.sitBddNom, 'Nom DB', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitBddNom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitBddNom) }}
+                                        {{ form_label(form.datePrevision, 'Date prévision', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.datePrevision, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.datePrevision) }}
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        {{ form_label(form.sitBddUser, 'Utilisateur DB', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitBddUser, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitBddUser) }}
+                                        {{ form_label(form.idTachesPriorites, 'Priorité', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.idTachesPriorites, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.idTachesPriorites) }}
                                     </div>
 
                                     <div class="col-md-3 mb-3">
-                                        {{ form_label(form.sitBddMdp, 'Mot de passe DB', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.sitBddMdp, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.sitBddMdp) }}
+                                        {{ form_label(form.tacTauxHoraire, 'Mot de passe DB', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacTauxHoraire, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacTauxHoraire) }}
                                     </div>
 
                                    
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.idTachesType, 'Tache type', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.idTachesType, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.idTachesType) }}
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        {{ form_label(form.periodic, 'Périodique', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.periodic, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.periodic) }}
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        {{ form_label(form.joursExecution, 'Jour éxecution', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.joursExecution, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.joursExecution) }}
+                                    </div>
+
+                                   
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.tacShiftJour, 'Shift jour', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.tacShiftJour, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.tacShiftJour) }}
+                                    </div>
+                                    
                                 </div>
                             </div>
                             
@@ -122,7 +147,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-end align-items-center gap-3 mb-4">
                 <div>
-                    <a href="{{ path('app_site_index') }}" class="btn btn-warning btn-wave">Annuler</a>
+                    <a href="{{ path('app_tache_index') }}" class="btn btn-warning btn-wave">Annuler</a>
                 </div>
                 <div>
                     <button type="submit" {% if isView %}disabled{% endif %} class="btn btn-primary btn-wave _btn_submit">Valider</button>

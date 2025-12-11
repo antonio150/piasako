@@ -153,74 +153,6 @@ class DatabaseSwitcher
         
     }
 
-    public function switchDatabaseCreateSite(string $databaseName, $siteBddUser, $siteBddMdp): void
-    {
-        // 🔥 Nouvelle URL de connexion
-
-        // Récupérer l'URL de la base de données actuelle
-        $databaseUrl = $_ENV['DATABASE_URL_MAIN'] ?? getenv('DATABASE_URL_MAIN');
-        $schemaManager = $this->connection->createSchemaManager();
-        $existingDatabases = $schemaManager->listDatabases();
-        $params = $this->connection->getParams();
-        $dbType = $_ENV['DB_TYPE'] ?? 'mysql'; // Lecture du type de base de données depuis .env
-        
-        // Définir le driver et les paramètres spécifiques au type de base de données
-        $driver = 'pdo_mysql';
-        $charset = 'utf8mb4';
-        $serverVersion = '10.4.32-MariaDB';
-        
-        // Port par défaut selon le type de base de données
-        $defaultPort = 3306;
-        $port = $params['port'] ?? $defaultPort;
-
-        try {
-            $testConnection = DriverManager::getConnection([
-                'driver' => $driver,
-                'host' => $params['host'],
-                'port' => $port,
-                'dbname' => $databaseName,
-                'user' => $siteBddUser,
-                'password' => $siteBddMdp,
-                'charset' => $charset,
-            ]);
-            // Exécuter une requête simple pour vérifier l'accès
-            $testConnection->executeQuery('SELECT 1');
-            $databaseExistsWithUser = true;
-            $errors[] = "base de données avec cet utilisateur";
-            $testConnection->close();
-            
-            $newUrl = "mysql://".rawurlencode($siteBddUser).":".rawurlencode($siteBddMdp)."@".$params['host'].":".$port."/".$databaseName."?serverVersion=".$serverVersion."&charset=".$charset;
-           
-        } catch (\Exception $e) {
-           
-            $newUrl = $_ENV['DATABASE_URL_DYNAMIC_MYSQL'] ?? getenv('DATABASE_URL_DYNAMIC_MYSQL');
-           
-            // Fallback sur la variable générique si les spécifiques ne sont pas définies
-            if (empty($newUrl)) {
-                $newUrl = $_ENV['DATABASE_URL_DYNAMIC'] ?? getenv('DATABASE_URL_DYNAMIC');
-            }
-        }
-
-        // ⚡ Modifier dynamiquement la connexion de `dynamic`
-        $params = $this->entityManager->getConnection()->getParams();
-        $params['url'] = $newUrl;
-
-    
-
-        // 🏗️ Créer un nouveau `EntityManager` pour la base dynamique
-        $config = ORMSetup::createAttributeMetadataConfiguration(
-            [__DIR__ . '/../Entity/Dynamic'], // 📌 Chemin des entités
-            true
-        );
-        $newConnection = DriverManager::getConnection($params);
-        $newEntityManager = new EntityManager($newConnection, $config);
-
-        // 🔄 Mettre à jour l'EntityManager courant
-        $this->entityManager = $newEntityManager;
-        // 🧠 Stocke dans le provider
-        $this->provider->setEntityManager($newEntityManager);
-
-    }
 
     public function switchDatabase(string $databaseName): void
     {
@@ -229,7 +161,6 @@ class DatabaseSwitcher
         // Récupérer l'URL de la base de données actuelle
         $databaseUrl = $_ENV['DATABASE_URL_MAIN'] ?? getenv('DATABASE_URL_MAIN');
         $schemaManager = $this->connection->createSchemaManager();
-        $existingDatabases = $schemaManager->listDatabases();
         $params = $this->connection->getParams();
         $dbType = $_ENV['DB_TYPE'] ?? 'mysql'; // Lecture du type de base de données depuis .env
 
@@ -272,9 +203,7 @@ class DatabaseSwitcher
             $newUrl = "mysql://".rawurlencode($siteBddUser).":".rawurlencode($siteBddMdp)."@".$params['host'].":".$port."/".$databaseName."?serverVersion=".$serverVersion."&charset=".$charset;
             
         } catch (\Exception $e) {
-
-            dump($e);
-           
+ 
             $newUrl = $_ENV['DATABASE_URL_DYNAMIC_MYSQL'] ?? getenv('DATABASE_URL_DYNAMIC_MYSQL');
            
             // Fallback sur la variable générique si les spécifiques ne sont pas définies

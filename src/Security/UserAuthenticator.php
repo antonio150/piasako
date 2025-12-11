@@ -49,6 +49,7 @@ class UserAuthenticator extends AbstractAuthenticator implements AuthenticationE
         $userRepository = $this->entityManager->getRepository(SuperUser::class);
         $user = $userRepository->findOneBy(['email' => $email]);
 
+       
         if ($user instanceof SuperUser && !$user->isEstActif()) {
             throw new WebAccessDeniedException();
         }
@@ -57,7 +58,7 @@ class UserAuthenticator extends AbstractAuthenticator implements AuthenticationE
             new UserBadge($email),
             new PasswordCredentials($request->request->get('_password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+               
                 new RememberMeBadge(),
             ]
         );
