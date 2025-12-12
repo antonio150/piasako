@@ -80,8 +80,8 @@ class Personne
     #[ORM\JoinColumn(name: 'UserCreation', referencedColumnName: 'ID_User_Site', nullable: true, onDelete: 'CASCADE')]
     private ?Utilisateur $usercreation;
 
-    #[ORM\Column(name: 'PERS_Inactif', type: 'boolean', nullable: true)]
-    private bool $persInactif = false;
+    #[ORM\Column(name: 'PERS_Actif', type: 'boolean', nullable: true)]
+    private bool $estActif = false;
 
     #[ORM\Column(name: 'PERS_DateEmbauche', type: 'date', nullable: true)]
     private ?\DateTimeInterface $persDateembauche;
@@ -252,14 +252,14 @@ class Personne
         return $this;
     }
 
-    public function isPersInactif(): ?bool
+    public function isestActif(): ?bool
     {
-        return $this->persInactif;
+        return $this->estActif;
     }
 
-    public function setPersInactif(bool $persInactif): self
+    public function setestActif(bool $estActif): self
     {
-        $this->persInactif = $persInactif;
+        $this->estActif = $estActif;
         return $this;
     }
 

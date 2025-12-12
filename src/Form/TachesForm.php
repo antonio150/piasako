@@ -6,6 +6,8 @@ use App\Entity\Dynamic\Taches;
 use App\Entity\Dynamic\TachesPriorites;
 use App\Entity\Dynamic\TachesType;
 use App\Entity\Main\Site;
+use App\Service\DynamicEntityManagerProvider;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,8 +23,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
+
 class TachesForm extends AbstractType
 {
+    private DynamicEntityManagerProvider $dynamicEntityManagerProvider;
+
+    public function __construct(DynamicEntityManagerProvider $dynamicEntityManagerProvider)
+    {
+        $this->dynamicEntityManagerProvider = $dynamicEntityManagerProvider;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -87,9 +97,15 @@ class TachesForm extends AbstractType
             ])
             ->add('idTachesPriorites', EntityType::class, [
                 'class' => TachesPriorites::class,
-                'choice_label' => 'Priorité',   // le champ affiché dans le select
+                'choice_label' => 'Priorité',
                 'placeholder' => 'Sélectionnez un priorité',
                 'required' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    $dynamicEm = $this->dynamicEntityManagerProvider->getEntityManager();
+                    $repo = $dynamicEm->getRepository(TachesPriorites::class);
+                    return $repo->createQueryBuilder('p')
+                        ->orderBy('p.tptNiveau', 'ASC');
+                },
                 'attr' => [
                     'class' => 'form-control custom-form-control'
                 ],
@@ -103,11 +119,26 @@ class TachesForm extends AbstractType
                     'step' => '0.01', // permet les décimales dans le navigateur
                 ],
             ])
+            ->add('tacBudget', NumberType::class, [
+                'label' => 'Budget',
+                'required' => true,
+                'scale' => 2, // nombre de décimales (ex : 2 pour 12.50)
+                'attr' => [
+                    'class' => 'form-control custom-form-control',
+                    'step' => '0.01', // permet les décimales dans le navigateur
+                ],
+            ])
             ->add('idTachesType', EntityType::class, [
                 'class' => TachesType::class,
-                'choice_label' => 'Type',   // le champ affiché dans le select
+                'choice_label' => 'Type',
                 'placeholder' => 'Sélectionnez un type',
                 'required' => true,
+                'query_builder' => function (EntityRepository $er) {
+                    $dynamicEm = $this->dynamicEntityManagerProvider->getEntityManager();
+                    $repo = $dynamicEm->getRepository(TachesType::class);
+                    return $repo->createQueryBuilder('t')
+                        ->orderBy('t.ttpLibelle', 'ASC');
+                },
                 'attr' => [
                     'class' => 'form-control custom-form-control'
                 ],

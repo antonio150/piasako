@@ -154,8 +154,9 @@ class DatabaseSwitcher
     }
 
 
-    public function switchDatabase(string $databaseName): void
+    public function switchDatabase(): void
     {
+        $databaseName = "tapos";
         // 🔥 Nouvelle URL de connexion
 
         // Récupérer l'URL de la base de données actuelle
@@ -230,6 +231,7 @@ class DatabaseSwitcher
         $this->entityManager = $newEntityManager;
         // 🧠 Stocke dans le provider
         $this->provider->setEntityManager($newEntityManager);
+       
     }
 
     /**
