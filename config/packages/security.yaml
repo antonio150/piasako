@@ -37,19 +37,23 @@ security:
                 login_path: app_login_dynamic
                 check_path: app_login_dynamic
                 enable_csrf: true
-                default_target_path: dynamic_home
+                default_target_path: app_home_dynamic
             logout:
                 path: app_logout_dynamic
                 target: app_login_dynamic
 
         # Firewall pour la base main (ex. admin ou back-office)
+        # Ce firewall doit couvrir la route de login (/login) pour que Symfony
+        # intercepte la requête POST et traite l'authentification.
+        # On utilise '^/' pour couvrir l'application principale. Le firewall
+        # `dynamic` est déclaré avant et continuera d'intercepter /espaceclient.
         main:
-            pattern: ^/superadmin     # ou ^/ si tu veux que ce soit le principal
+            pattern: ^/    # couvre /login et autres routes principales
             provider: main_users
             form_login:
                 login_path: app_login_main
                 check_path: app_login_main
-                enable_csrf: true
+                enable_csrf: false
                 default_target_path: app_home
             logout:
                 path: app_logout_main
