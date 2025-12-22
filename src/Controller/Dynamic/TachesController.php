@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/tache')]
+#[Route('/espaceclient/tache')]
 final class TachesController extends AbstractController
 {
     private DatabaseSwitcher $databaseSwitcher;

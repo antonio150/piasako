@@ -1,0 +1,189 @@
+{% extends 'base_dynamic.html.twig' %}
+
+{% import "components/_informations.html.twig" as macros_information %}
+
+{% block title %}
+    {{ isView ? 'Voir Personne' : (personne.id ? 'Modifier Personne' : 'Nouveau Personne') }}
+{% endblock %}
+
+{% block block_css %}
+    <style>
+        .custom-form-control {
+            height: 38.39px;
+            appearance: auto !important;
+        }
+        /* --- styles pour la liste des jours --- */
+        .weekday-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+        .weekday-item {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            background: #fff;
+            color: #212529;
+            cursor: pointer;
+            user-select: none;
+            font-size: 0.92rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 70px;
+            text-align: center;
+        }
+        .weekday-item:focus {
+            outline: 2px solid rgba(13,110,253,0.25);
+            outline-offset: 2px;
+        }
+        .weekday-item.selected {
+            background-color: #0d6efd; /* bootstrap primary */
+            color: #fff;
+            border-color: #0d6efd;
+        }
+        /* si l'affichage est restreint, autoriser wrapping */
+        @media (max-width: 420px) {
+            .weekday-list { flex-wrap: wrap; gap:6px; }
+            .weekday-item { min-width: 60px; font-size:0.85rem; padding:5px 8px; }
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div class="row mt-4">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header" style="border-bottom: none">
+                    <div class="row align-items-center mt-2">
+                        <div class="col-md-4">
+                            <div class="d-flex align-items-center justify-content-start gap-3">
+                                <h3 class="mb-0">Personne</h3>
+                              
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8">
+							<div class="d-flex align-items-center flex-wrap justify-content-end">
+								<div class="custom-toggle-switch toggle-sm ms-2">
+                                    {{ form_widget(form.estActif, {
+                                            'label' : false,
+                                            'attr': {
+                                                'class': 'form-check-input', 
+                                                'disabled': isView ? true : false 
+                                            }
+                                        }) }}
+
+                                        <label for="{{ form.estActif.vars.id }}" id="sitActifLabel" class="label-primary"></label>
+                                </div>
+                                <div><label class="text-muted m-0" id="sitActifStatus" for="{{ form.estActif.vars.id }}">Actif</label></div>
+							</div>
+						</div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        {{ form_label(form.persNom, 'Nom', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persNom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persNom) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                   
+                                    
+                                
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persPrenom, 'Prénom', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persPrenom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persPrenom) }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persMail, 'Mail', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persMail, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persMail) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persContact, 'Tél', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persContact, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persContact) }}
+                                    </div>
+                                     <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persNumBadge, 'N° Badge', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persNumBadge, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persNumBadge) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                   
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persSex, 'Sexe', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persSex, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persSex) }}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.idProfil, 'Profil', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.idProfil, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.idProfil) }}
+                                    </div>
+                                </div>
+                               
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.persNumCIN, 'N° CIN', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.persNumCIN, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.persNumCIN) }}
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-end align-items-center gap-3 mb-4">
+                <div>
+                    <a href="{{ path('app_tache_index') }}" class="btn btn-warning btn-wave">Annuler</a>
+                </div>
+                <div>
+                    <button type="submit" {% if isView %}disabled{% endif %} class="btn btn-primary btn-wave _btn_submit">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block block_js %}
+    {% include 'script/_form.html.twig' %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sitActifSwitch = document.getElementById('{{ form.estActif.vars.id }}');
+            const sitActifLabel = document.getElementById('sitActifLabel');
+            const sitActifStatus = document.getElementById('sitActifStatus');
+
+            if (sitActifSwitch && sitActifStatus) {
+                sitActifStatus.textContent = sitActifSwitch.checked ? 'Inactif' : 'Actif';
+                sitActifSwitch.addEventListener('change', function () {
+                    sitActifStatus.textContent = this.checked ? 'Inactif' : 'Actif';
+                });
+            }
+        });
+    </script>
+
+    
+{% endblock %}

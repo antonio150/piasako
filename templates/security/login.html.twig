@@ -112,7 +112,7 @@
                                                 <h3 class="mb-2 fs-3 text-center">Se connecter</h3>
 
                                                 <!-- Form START -->
-                                                <form class="mt-4 text-start" id="formLogin" method="POST">
+                                                <form class="mt-4 text-start" id="formLogin" method="POST" action="{{ path('app_login_main') }}">
                                                     {% set classError = "" %}
                                                     {% if error %}
                                                         {% set classError = "is-invalid" %}
@@ -133,6 +133,16 @@
                                                             id="inputUsername" 
                                                             class="form-control mt-2 {{ classError }}"
                                                             required autofocus
+                                                        >
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label>Site code (optionnel) <span class="text-muted">(sitCode)</span></label>
+                                                        <input
+                                                            type="text"
+                                                            name="sitCode"
+                                                            id="sitCode"
+                                                            class="form-control mt-2"
+                                                            placeholder="Entrez le code du site pour espace client"
                                                         >
                                                     </div>
                                                     <div class="form-group mb-1">
@@ -219,6 +229,7 @@
     const input_login = document.getElementById("inputUsername");
     const input_mdp = document.getElementById("password-field");
     const check_remember = document.getElementById("savepassword");
+    const input_sitcode = document.getElementById("sitCode");
 
     function saveStorageLogin(username, password) {
         localStorage.setItem("username", username);
@@ -238,12 +249,20 @@
         }
     }
 
-    form_login.addEventListener("submit", function () {
+    form_login.addEventListener("submit", function (e) {
+        // Avant soumission, définir l'URL d'action selon sitCode
+        if (input_sitcode && input_sitcode.value.trim() !== "") {
+            form_login.action = "{{ path('app_login_dynamic') }}";
+        } else {
+            form_login.action = "{{ path('app_login_main') }}";
+        }
+
         if(check_remember.checked === true){
             saveStorageLogin(input_login.value, input_mdp.value);
         }else{
             removeStorageLogin();
         }
+        // laisser la soumission continuer normalement
     });
 
     setLoginForm();

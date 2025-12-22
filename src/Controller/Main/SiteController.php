@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/site')]
+#[Route('/superadmin/site')]
 final class SiteController extends AbstractController
 {
     private DatabaseSwitcher $databaseSwitcher;

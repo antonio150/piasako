@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/main/user')]
+#[Route('/superadmin/user')]
 final class SuperUserController extends AbstractController
 {
     #[Route('/', name: 'app_superuser_index', methods: ['GET'])]
