@@ -31,13 +31,11 @@ security:
             
         # Firewall pour la base dynamic (ex. API ou espace client)
         dynamic:
-            pattern: ^/espaceclient   # adapte le pattern selon tes routes
+            pattern: ^/(espaceclient|login-dynamic)   # adapte le pattern selon tes routes
             provider: dynamic_users
-            form_login:
-                login_path: app_login_dynamic
-                check_path: app_login_dynamic
-                enable_csrf: true
-                default_target_path: app_home_dynamic
+            stateless: false
+            custom_authenticators:
+                - App\Security\UserDynamicAuthenticator
             logout:
                 path: app_logout_dynamic
                 target: app_login_dynamic

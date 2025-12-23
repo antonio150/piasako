@@ -41,7 +41,7 @@ class SecurityController extends AbstractController
         /** @var Utilisateur $currentUser */
         $currentUser = $this->getUser();
         if ($currentUser) {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_tache_index');
         }
 
         // get the login error if there is one

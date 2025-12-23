@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Main\Controller;
+namespace App\Controller\Main;
 
 use App\Entity\Main\SuperUser;
 use App\Service\DataService;
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    #[isGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(
         EntityManagerInterface $entityManager
        

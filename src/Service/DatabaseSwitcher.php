@@ -154,11 +154,11 @@ class DatabaseSwitcher
     }
 
 
-    public function switchDatabase(): void
+    public function switchDatabase(?string $databaseName = null): void
     {
-        $databaseName = "tapos";
-        // 🔥 Nouvelle URL de connexion
-
+        if (empty($databaseName)) {
+            $databaseName = 'tapos';
+        }
         // Récupérer l'URL de la base de données actuelle
         $databaseUrl = $_ENV['DATABASE_URL_MAIN'] ?? getenv('DATABASE_URL_MAIN');
         $schemaManager = $this->connection->createSchemaManager();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dynamic\Controller;
+namespace App\Controller\Dynamic;
 
 use App\Entity\Main\SuperUser;
 use App\Service\DataService;
@@ -12,8 +12,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class HomeDynamicController extends AbstractController
 {
-    #[Route('/', name: 'app_home_dynamic')]
-    #[isGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/espaceclient', name: 'app_home_dynamic')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(
         EntityManagerInterface $entityManager
        
