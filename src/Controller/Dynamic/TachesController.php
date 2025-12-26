@@ -6,7 +6,9 @@ use App\Entity\Dynamic\Taches;
 use App\Form\TachesForm;
 use App\Service\DatabaseSwitcher;
 use App\Service\DynamicEntityManagerProvider;
+use App\Service\RoleCheckerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,13 +18,15 @@ final class TachesController extends AbstractController
 {
     private DatabaseSwitcher $databaseSwitcher;
     private DynamicEntityManagerProvider $dynamicEntityManagerProvider;
-   
+    private RoleCheckerService $roleCheckerService;
     public function __construct(
         DatabaseSwitcher $databaseSwitcher,
+        RoleCheckerService $roleCheckerService,
         DynamicEntityManagerProvider $dynamicEntityManagerProvider,
     )
     {
         $this->databaseSwitcher = $databaseSwitcher;
+        $this->roleCheckerService = $roleCheckerService;
         $this->dynamicEntityManagerProvider = $dynamicEntityManagerProvider;
     }
 
@@ -59,6 +63,13 @@ final class TachesController extends AbstractController
     #[Route('/', name: 'app_tache_index', methods: ['POST', 'GET'])]
     public function index(Request $request): Response
     {
+        // Vérifier les rôles via le service
+        $requiredRoles = ['ROLE_SUPERVISEUR', 'ROLE_ADMIN'];
+        $roleCheck = $this->roleCheckerService->checkUserRolesWithResponse($request, $requiredRoles);
+        // Si le résultat est une JsonResponse, retourner l'erreur
+        if ($roleCheck instanceof JsonResponse) {
+            return $roleCheck;
+        }
         $this->switchToDatabase();
         $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
 

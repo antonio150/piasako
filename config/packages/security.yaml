@@ -58,7 +58,6 @@ security:
                 target: app_login_main
 
     access_control:
-        - { path: ^/espaceclient, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/superadmin, roles: IS_AUTHENTICATED_FULLY }
         
     access_denied_url: /access-denied

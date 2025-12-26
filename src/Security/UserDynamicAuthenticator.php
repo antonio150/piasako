@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
@@ -24,6 +25,7 @@ class UserDynamicAuthenticator extends AbstractAuthenticator
     public function __construct(
         private DatabaseSwitcher $databaseSwitcher,
         private EntityManagerInterface $mainEntityManager,
+        private JWTTokenManagerInterface $jwtManager,
         private DynamicEntityManagerProvider $dynamicEntityManagerProvider,
     ) {
         $this->dynamicEntityManagerProvider = $dynamicEntityManagerProvider;
@@ -40,7 +42,7 @@ class UserDynamicAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): Passport
     {
         error_log('[UserDynamicAuthenticator] authenticate called. IP=' . $request->getClientIp());
-        $this->databaseSwitcher->switchDatabase('tapos');
+       
         // Stocke le nom de la base dynamique en session pour pouvoir
         // reconfigurer la connexion sur les prochaines requêtes.
         try {
@@ -51,11 +53,6 @@ class UserDynamicAuthenticator extends AbstractAuthenticator
             // Ne doit pas casser l'authentification si la session n'est pas disponible
             dump('[UserDynamicAuthenticator] unable to store dynamic_db in session: ' . $e->getMessage());
         }
-        $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
-        // Récupérer les informations d'authentification depuis la requête.
-        // Le formulaire du site envoie `application/x-www-form-urlencoded` (pas JSON),
-        // donc on doit d'abord tenter de parser JSON, puis tomber en fallback sur
-        // $request->request (données POST classiques).
         $data = null;
         $contentType = $request->headers->get('Content-Type') ?? '';
         if (stripos($contentType, 'application/json') !== false) {
@@ -77,11 +74,14 @@ class UserDynamicAuthenticator extends AbstractAuthenticator
             throw new AuthenticationException('Les paramètres d\'authentification sont manquants.');
         }
 
-        $entityManager->getRepository(Utilisateur::class)->findOneBy(['userLogin' => $username]);
-
         $site = $this->mainEntityManager
             ->getRepository(\App\Entity\Main\Site::class)
             ->findOneBy(['sitCode' => $codeVoucher]);
+        $databasename = $site->getSitBddNom();
+         $this->databaseSwitcher->switchDatabase($databasename);
+        $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
+
+        $entityManager->getRepository(Utilisateur::class)->findOneBy(['userLogin' => $username]);
 
         return new Passport(
             new UserBadge($username, function ($userIdentifier) use ($entityManager) {
@@ -93,8 +93,32 @@ class UserDynamicAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     { 
-        $request->getSession()->set('dynamic_database', 'tapos');
-        error_log('[UserDynamicAuthenticator] authentication success for user=' . ($token->getUser() ? (is_object($token->getUser()) ? get_class($token->getUser()) : (string)$token->getUser()) : 'NULL') . ' firewall=' . $firewallName);
+        $user = $token->getUser();
+
+        $data = null;
+        $contentType = $request->headers->get('Content-Type') ?? '';
+        if (stripos($contentType, 'application/json') !== false) {
+            $data = json_decode($request->getContent(), true);
+        }
+
+        if (!is_array($data) || empty($data)) {
+            // fallback pour form-data / x-www-form-urlencoded
+            $data = $request->request->all();
+        }
+        $codeVoucher = $data['sitCode'] ?? $request->request->get('sitCode');
+        $site = $this->mainEntityManager
+            ->getRepository(\App\Entity\Main\Site::class)
+            ->findOneBy(['sitCode' => $codeVoucher]);
+
+        $id_site = $site->getId();
+        $payload = [
+            'username' => $user->getUserIdentifier(),
+            'roles' => $user->getRoles(),
+            'id_site' => $id_site,
+            'idUtilisateur' => $user->getId(),
+        ];
+        $jwt = $this->jwtManager->createFromPayload($user, $payload);
+        $request->getSession()->set('tokken', $jwt);
         // Redirect to espaceclient root to ensure session is used on next request
         return new \Symfony\Component\HttpFoundation\RedirectResponse('/espaceclient/tache');
 
