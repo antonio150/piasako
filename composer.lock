@@ -4,8 +4,41 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f715a67c36804e97ce5201e2dd8d257",
+    "content-hash": "c4c2d291a7941475d86f6c46c5c11d49",
     "packages": [
+        {
+            "name": "antonio150/uploadimagebundle",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antonio150/UploadImageBundle.git",
+                "reference": "e024ef32ce43dfebcc29e4bb9a2dc537bbba69ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antonio150/UploadImageBundle/zipball/e024ef32ce43dfebcc29e4bb9a2dc537bbba69ed",
+                "reference": "e024ef32ce43dfebcc29e4bb9a2dc537bbba69ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "UploadImageBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "Un bundle Symfony pour l'upload d'images",
+            "support": {
+                "issues": "https://github.com/antonio150/UploadImageBundle/issues",
+                "source": "https://github.com/antonio150/UploadImageBundle/tree/main"
+            },
+            "time": "2025-04-22T18:25:20+00:00"
+        },
         {
             "name": "composer/semver",
             "version": "3.4.4",
@@ -10735,7 +10768,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "antonio150/uploadimagebundle": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

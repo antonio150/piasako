@@ -61,27 +61,10 @@
                     <div class="row align-items-center mt-2">
                         <div class="col-md-4">
                             <div class="d-flex align-items-center justify-content-start gap-3">
-                                <h3 class="mb-0">Tache</h3>
+                                <h3 class="mb-0">Tache Type</h3>
                               
                             </div>
                         </div>
-                        
-                        <div class="col-md-8">
-							<div class="d-flex align-items-center flex-wrap justify-content-end">
-								<div class="custom-toggle-switch toggle-sm ms-2">
-                                    {{ form_widget(form.estActif, {
-                                            'label' : false,
-                                            'attr': {
-                                                'class': 'form-check-input', 
-                                                'disabled': isView ? true : false 
-                                            }
-                                        }) }}
-
-                                        <label for="{{ form.estActif.vars.id }}" id="sitActifLabel" class="label-primary"></label>
-                                </div>
-                                <div><label class="text-muted m-0" id="sitActifStatus" for="{{ form.estActif.vars.id }}">Actif</label></div>
-							</div>
-						</div>
                     </div>
                 </div>
 
@@ -90,105 +73,58 @@
                             <div class="col-12">
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
-                                        {{ form_label(form.tacNom, 'Nom', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacNom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacNom) }}
+                                        {{ form_label(form.ttpLibelle, 'Libelle', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.ttpLibelle, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.ttpLibelle) }}
                                     </div>
                                 </div>
                                 <div class="row">
-                                   
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.ttpCouleur, 'Couleur', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.ttpCouleur, {
+                                            attr: {
+                                                class: ' form-control-color',
+                                                type: 'color',
+                                                disabled: isView ? true : false
+                                            }
+                                        }) }}
+                                        {{ form_errors(form.ttpCouleur) }}
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="form-check mt-4">
+                                            {{ form_widget(form.ttpcomptabiliser, {
+                                                'attr': {
+                                                    'class': 'form-check-input',
+                                                    'disabled': isView ? true : false
+                                                }
+                                            }) }}
+                                            {{ form_label(form.ttpcomptabiliser, 'Comptabiliser', {'label_attr': {'class': 'form-check-label'}}) }}
+                                        </div>
+                                        {{ form_errors(form.ttpcomptabiliser) }}
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        <div class="form-check mt-4">
+                                            {{ form_widget(form.ttpplanifiable, {
+                                                'attr': {
+                                                    'class': 'form-check-input',
+                                                    'disabled': isView ? true : false
+                                                }
+                                            }) }}
+                                            {{ form_label(form.ttpplanifiable, 'Planifiable', {'label_attr': {'class': 'form-check-label'}}) }}
+                                        </div>
+                                        {{ form_errors(form.ttpplanifiable) }}
+                                    </div>
+                                </div>
+                                <div class="row">
                                     
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.ttpNbTravailleurRequis, 'Nombre Travailleur', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.ttpNbTravailleurRequis, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.ttpNbTravailleurRequis) }}
+                                    </div>
+                                </div>
                                 
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacDureeestimatif, 'Durée éstimative', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacDureeestimatif, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacDureeestimatif) }}
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacBudget, 'Budget', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacBudget, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacBudget) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacNbtravailleurrequis, 'Travailleur réquis', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacNbtravailleurrequis, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacNbtravailleurrequis) }}
-                                    </div>
-                                     <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacTauxHoraire, 'Taux horaire', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacTauxHoraire, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacTauxHoraire) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-
-                                   
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.idTachesPriorites, 'Priorité', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.idTachesPriorites, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.idTachesPriorites) }}
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.idTachesType, 'Tache type', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.idTachesType, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.idTachesType) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        {# Onglets : Périodique / Ponctuel #}
-                                        <label class="mb-2">Fréquence</label>
-                                        <div class="mb-2">
-                                            <div class="nav nav-tabs" role="tablist" id="periodicTabs">
-                                                <button class="nav-link" id="tab-periodic" data-target="pane-periodic" type="button" role="tab" aria-controls="pane-periodic">Périodique</button>
-                                                <button class="nav-link" id="tab-ponctuel" data-target="pane-ponctuel" type="button" role="tab" aria-controls="pane-ponctuel">Ponctuel</button>
-                                            </div>
-                                        </div>
-
-                                        <div class="tab-content">
-                                            <div class="tab-pane" id="pane-periodic" role="tabpanel" aria-labelledby="tab-periodic">
-                                                <div class="weekday-list mb-2" id="weekdayList" role="group" aria-label="Jours de la semaine">
-                                                    {% set days = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'] %}
-                                                    {% for day in days %}
-                                                        <div class="weekday-item" data-value="{{ day }}" tabindex="0">{{ day }}</div>
-                                                    {% endfor %}
-                                                </div>
-                                                {# conserver le champ joursExecution caché pour soumission #}
-                                                {{ form_widget(form.joursExecution, {'attr': {'class': 'd-none', 'disabled': isView ? true : false}}) }}
-                                                {{ form_errors(form.joursExecution) }}
-                                            </div>
-
-                                            <div class="tab-pane" id="pane-ponctuel" role="tabpanel" aria-labelledby="tab-ponctuel">
-                                                <div class="mb-2">
-                                                    {{ form_widget(form.datePrevision, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                                    {{ form_errors(form.datePrevision) }}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {# Champ periodic rendu caché : la logique JS mettra à jour sa valeur/checked #}
-                                        {{ form_widget(form.periodic, {'attr': {'class': 'd-none periodic-field'}}) }}
-                                        {{ form_errors(form.periodic) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacShiftJour, 'Shift jour', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacShiftJour, {'attr': {'class': '', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacShiftJour) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.tacDescription, 'Déscription', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.tacDescription, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.tacDescription) }}
-                                    </div>
-                                    
-                                </div>
                             </div>
                             
                     </div>
@@ -212,145 +148,6 @@
 {% endblock %}
 
 {% block block_js %}
-    {% include 'script/_form.html.twig' %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sitActifSwitch = document.getElementById('{{ form.estActif.vars.id }}');
-            const sitActifLabel = document.getElementById('sitActifLabel');
-            const sitActifStatus = document.getElementById('sitActifStatus');
-
-            if (sitActifSwitch && sitActifStatus) {
-                sitActifStatus.textContent = sitActifSwitch.checked ? 'Inactif' : 'Actif';
-                sitActifSwitch.addEventListener('change', function () {
-                    sitActifStatus.textContent = this.checked ? 'Inactif' : 'Actif';
-                });
-            }
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const list = document.getElementById('weekdayList');
-            const hiddenJours = document.getElementById('{{ form.joursExecution.vars.id }}');
-            const hiddenPeriodic = document.getElementById('{{ form.periodic.vars.id }}');
-            const datePrevisionField = document.getElementById('{{ form.datePrevision.vars.id }}');
-            const isViewOnly = {{ isView ? 'true' : 'false' }};
-
-            // onglets
-            const tabPeriodic = document.getElementById('tab-periodic');
-            const tabPonctuel = document.getElementById('tab-ponctuel');
-            const panePeriodic = document.getElementById('pane-periodic');
-            const panePonctuel = document.getElementById('pane-ponctuel');
-
-            if (!hiddenPeriodic) return;
-
-            // détermine si periodic est actif (gère checkbox ou champ value)
-            function isPeriodicValueTrue(el) {
-                if (!el) return false;
-                if (el.tagName === 'INPUT' && el.type === 'checkbox') return el.checked;
-                const v = (el.value || '').toString().toLowerCase();
-                return ['1','true','on','yes'].includes(v);
-            }
-
-            function setPeriodicValue(active) {
-                if (!hiddenPeriodic) return;
-                if (hiddenPeriodic.tagName === 'INPUT' && hiddenPeriodic.type === 'checkbox') {
-                    hiddenPeriodic.checked = !!active;
-                } else {
-                    hiddenPeriodic.value = active ? '1' : '';
-                }
-            }
-
-            function showPane(periodicActive) {
-                // classes visuelles
-                [tabPeriodic, tabPonctuel].forEach(t => t && t.classList.remove('active'));
-                [panePeriodic, panePonctuel].forEach(p => p && p.classList.remove('active'));
-
-                if (periodicActive) {
-                    tabPeriodic.classList.add('active');
-                    panePeriodic.classList.add('active');
-                } else {
-                    tabPonctuel.classList.add('active');
-                    panePonctuel.classList.add('active');
-                }
-
-                // activer/désactiver champs pour soumission
-                if (hiddenJours) {
-                    hiddenJours.disabled = !periodicActive;
-                }
-                if (datePrevisionField) {
-                    datePrevisionField.disabled = periodicActive; // si périodique on désactive la date ponctuelle
-                }
-            }
-
-            // initialisation onglet depuis le champ periodic
-            const initialPeriodic = isPeriodicValueTrue(hiddenPeriodic);
-            showPane(initialPeriodic);
-
-            // gestion clic onglets (désactivé en vue seule)
-            if (!isViewOnly) {
-                tabPeriodic.addEventListener('click', function () {
-                    setPeriodicValue(true);
-                    showPane(true);
-                });
-                tabPonctuel.addEventListener('click', function () {
-                    setPeriodicValue(false);
-                    showPane(false);
-                });
-            } else {
-                // rendre les onglets non-interactifs en mode vue seule
-                [tabPeriodic, tabPonctuel].forEach(t => t && t.setAttribute('aria-disabled','true'));
-            }
-
-            // ----- gestion des jours (même code que précédemment mais ajusté) -----
-            if (list && hiddenJours) {
-                const buttons = Array.from(list.querySelectorAll('.weekday-item'));
-
-                function getSelectedFromField() {
-                    if (hiddenJours.tagName === 'SELECT') {
-                        return Array.from(hiddenJours.selectedOptions).map(o => o.value || o.text);
-                    } else {
-                        const val = hiddenJours.value || '';
-                        return val ? val.split(',').map(s => s.trim()).filter(Boolean) : [];
-                    }
-                }
-
-                const initial = getSelectedFromField();
-                buttons.forEach(btn => {
-                    const val = btn.getAttribute('data-value');
-                    if (initial.includes(val) || initial.includes(val.toLowerCase())) {
-                        btn.classList.add('selected');
-                    }
-                    if (!isViewOnly) {
-                        btn.addEventListener('click', function () {
-                            this.classList.toggle('selected');
-                            syncJoursField();
-                        });
-                        btn.addEventListener('keydown', function (e) {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                this.click();
-                            }
-                        });
-                    } else {
-                        btn.setAttribute('tabindex', '-1');
-                    }
-                });
-
-                function syncJoursField() {
-                    const selectedValues = buttons.filter(b => b.classList.contains('selected')).map(b => b.getAttribute('data-value'));
-                    if (hiddenJours.tagName === 'SELECT') {
-                        Array.from(hiddenJours.options).forEach(o => {
-                            o.selected = selectedValues.includes(o.value) || selectedValues.includes(o.text);
-                        });
-                    } else {
-                        hiddenJours.value = selectedValues.join(',');
-                    }
-                }
-
-                // Sync initial state to hidden field in case initial selections were applied
-                syncJoursField();
-            }
-        });
-    </script>
+    
+  
 {% endblock %}

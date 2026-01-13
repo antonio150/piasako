@@ -25,9 +25,9 @@ use Symfony\Component\Uid\Uuid;
  * TachesType
  */
 #[ORM\Table(name: 'taches_type')]
-#[ORM\Index(name: 'WDIDX_Taches_Type_TPT_Planifiable', columns: ['TPT_Planifiable'])]
+#[ORM\Index(name: 'WDIDX_Taches_Type_TTP_Planifiable', columns: ['TTP_Planifiable'])]
 #[ORM\Index(name: 'WDIDX_Taches_Type_TTP_Libelle', columns: ['TTP_Libelle'])]
-#[ORM\Index(name: 'WDIDX_Taches_Type_TPT_Comptabiliser', columns: ['TPT_Comptabiliser'])]
+#[ORM\Index(name: 'WDIDX_Taches_Type_TTP_Comptabiliser', columns: ['TTP_Comptabiliser'])]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 
@@ -46,14 +46,14 @@ class TachesType
     #[ORM\JoinColumn(name: 'UserCreation', referencedColumnName: 'ID_User_Site',  nullable: true, onDelete: 'SET NULL')]
     private ?Utilisateur $usercreation;
 
-    #[ORM\Column(name: 'TTP_Couleur', type: 'string', length: 6, nullable: false)]
+    #[ORM\Column(name: 'TTP_Couleur', type: 'string', nullable: false)]
     private string $ttpCouleur;
 
-    #[ORM\Column(name: 'TPT_Comptabiliser', type: 'boolean', nullable: false)]
-    private bool $tptComptabiliser = false;
+    #[ORM\Column(name: 'TTP_Comptabiliser', type: 'boolean', nullable: false)]
+    private bool $ttpComptabiliser = false;
 
-    #[ORM\Column(name: 'TPT_Planifiable', type: 'boolean', nullable: false)]
-    private bool $tptPlanifiable = false;
+    #[ORM\Column(name: 'TTP_Planifiable', type: 'boolean', nullable: false)]
+    private bool $ttpPlanifiable = false;
 
     // Add OneToMany relationship
     #[ORM\OneToMany(mappedBy: 'idTachesType', targetEntity: Taches::class)]
@@ -66,8 +66,8 @@ class TachesType
     private $updatedAt;
 
     //entite pour le nombre de travailleurs requis
-    #[ORM\Column(name: 'TPT_Nb_Travailleur_Requis', type: 'integer', nullable: true)]
-    private ?int $tptNbTravailleurRequis = 0;
+    #[ORM\Column(name: 'TTP_Nb_Travailleur_Requis', type: 'integer', nullable: true)]
+    private ?int $ttpNbTravailleurRequis = 0;
 
     public function __construct()
     {
@@ -113,25 +113,25 @@ class TachesType
         return $this;
     }
 
-    public function isTptComptabiliser(): bool
+    public function isTtpComptabiliser(): bool
     {
-        return $this->tptComptabiliser;
+        return $this->ttpComptabiliser;
     }
 
-    public function setTptComptabiliser(bool $tptComptabiliser): self
+    public function setTtpComptabiliser(bool $ttpComptabiliser): self
     {
-        $this->tptComptabiliser = $tptComptabiliser;
+        $this->ttpComptabiliser = $ttpComptabiliser;
         return $this;
     }
 
-    public function isTptPlanifiable(): bool
+    public function isTtpPlanifiable(): bool
     {
-        return $this->tptPlanifiable;
+        return $this->ttpPlanifiable;
     }
 
-    public function setTptPlanifiable(bool $tptPlanifiable): self
+    public function setTtpPlanifiable(bool $ttpPlanifiable): self
     {
-        $this->tptPlanifiable = $tptPlanifiable;
+        $this->ttpPlanifiable = $ttpPlanifiable;
         return $this;
     }
 
@@ -160,14 +160,14 @@ class TachesType
         return $this;
     }
 
-    public function getTptNbTravailleurRequis(): ?int
+    public function getTtpNbTravailleurRequis(): ?int
     {
-        return $this->tptNbTravailleurRequis;
+        return $this->ttpNbTravailleurRequis;
     }
 
-    public function setTptNbTravailleurRequis(?int $tptNbTravailleurRequis): self
+    public function setTtpNbTravailleurRequis(?int $ttpNbTravailleurRequis): self
     {
-        $this->tptNbTravailleurRequis = $tptNbTravailleurRequis;
+        $this->ttpNbTravailleurRequis = $ttpNbTravailleurRequis;
         return $this;
     }
 

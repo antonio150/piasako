@@ -3,7 +3,9 @@
 namespace App\Controller\Dynamic;
 
 use App\Entity\Dynamic\Taches;
+use App\Entity\Dynamic\TachesType;
 use App\Form\TachesForm;
+use App\Form\TachesTypeForm;
 use App\Service\DatabaseSwitcher;
 use App\Service\DynamicEntityManagerProvider;
 use App\Service\RoleCheckerService;
@@ -13,8 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/espaceclient/tache')]
-final class TachesController extends AbstractController
+#[Route('/espaceclient/tachetype')]
+final class TachesTypeController extends AbstractController
 {
     private DatabaseSwitcher $databaseSwitcher;
     private DynamicEntityManagerProvider $dynamicEntityManagerProvider;
@@ -30,37 +32,34 @@ final class TachesController extends AbstractController
         $this->dynamicEntityManagerProvider = $dynamicEntityManagerProvider;
     }
 
-    private function switchToDatabase(): void
-    {
-        $this->databaseSwitcher->switchDatabase();
-    }
-
     private function form(
-        Request $request, Taches $taches, $entityManager
+        Request $request, TachesType $tachestype, $entityManager, $methode
     )
     {
         $isView = $request->query->get('view', false);
 
-        $form = $this->createForm(TachesForm::class, $taches, [
+        $form = $this->createForm(TachesTypeForm::class, $tachestype, [
             'disabled' => $isView,
         ]);
         $form->handleRequest($request);
        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($taches);
+            if ($methode === "add") {
+                $entityManager->persist($tachestype);
+            }
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_tachetype_index');
         }
 
-        return $this->render('espace_client/tache/form.html.twig', [
-            'taches' => $taches,
+        return $this->render('espace_client/tacheType/form.html.twig', [
+            'taches' => $tachestype,
             'form' => $form->createView(),
             'isView' => false,
         ]);
     }
 
-    #[Route('/', name: 'app_tache_index', methods: ['POST', 'GET'])]
+    #[Route('/', name: 'app_tachetype_index', methods: ['POST', 'GET'])]
     public function index(Request $request): Response
     {
         // Vérifier les rôles via le service
@@ -74,20 +73,14 @@ final class TachesController extends AbstractController
         $this->databaseSwitcher->switchDatabase($databasename);
         $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
 
-        $p_eActif = $request->query->get('__eActif', 1);
-        $estActif = !($p_eActif == 0);
-      
-        $taches = $entityManager->getRepository(Taches::class)->findBy([
-            'estActif' => $estActif
-        ]);
+        $tachetypes = $entityManager->getRepository(TachesType::class)->findAll();
 
-        return $this->render('espace_client/tache/index.html.twig', [
-            'taches' => $taches,
-            'estActif' => $estActif
+        return $this->render('espace_client/tacheType/index.html.twig', [
+            'tachetypes' => $tachetypes,
         ]);
     }
 
-    #[Route("/new", name:"app_tache_new", methods:["POST", "GET"])]
+    #[Route("/new", name:"app_tachetype_new", methods:["POST", "GET"])]
     public function new(Request $request): Response
     {
         // Vérifier les rôles via le service
@@ -100,10 +93,31 @@ final class TachesController extends AbstractController
         $databasename = $roleCheck['database_name'];
         $this->databaseSwitcher->switchDatabase($databasename);
         $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
-       
-       
-        $taches = new Taches();
-
-        return $this->form($request, $taches, $entityManager);
+        $tachestype = new TachesType();
+        $methode="add";
+        return $this->form($request, $tachestype, $entityManager, $methode);
     }
+
+    #[Route("/edit/{id}", name:"app_tachetype_edit", methods:["POST", "GET"])]
+    public function edit(Request $request, TachesType $tachestype): Response
+    {
+        $requiredRoles = ['ROLE_SUPERVISEUR','ROLE_AGENT', 'ROLE_ADMIN'];
+        $roleCheck = $this->roleCheckerService->checkUserRolesWithResponse($request, $requiredRoles);
+
+        if ($roleCheck instanceof JsonResponse) {
+            return $roleCheck;
+        }
+
+        $databasename = $roleCheck['database_name'];
+        $this->databaseSwitcher->switchDatabase($databasename);
+        $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
+
+        // 🔥 recharger l'entité dans le bon EntityManager
+        $tachestype = $entityManager
+            ->getRepository(TachesType::class)
+            ->find($tachestype->getId());
+        $methode="edit";
+        return $this->form($request, $tachestype, $entityManager,$methode);
+    }
+
 }

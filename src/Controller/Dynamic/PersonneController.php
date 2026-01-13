@@ -7,7 +7,9 @@ use App\Form\PersonneForm;
 use App\Form\TachesForm;
 use App\Service\DatabaseSwitcher;
 use App\Service\DynamicEntityManagerProvider;
+use App\Service\RoleCheckerService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,20 +19,17 @@ final class PersonneController extends AbstractController
 {
     private DatabaseSwitcher $databaseSwitcher;
     private DynamicEntityManagerProvider $dynamicEntityManagerProvider;
-    
+    private RoleCheckerService $roleCheckerService;
    
     public function __construct(
         DatabaseSwitcher $databaseSwitcher,
         DynamicEntityManagerProvider $dynamicEntityManagerProvider,
+        RoleCheckerService $roleCheckerService,
     )
     {
         $this->databaseSwitcher = $databaseSwitcher;
         $this->dynamicEntityManagerProvider = $dynamicEntityManagerProvider;
-    }
-
-     private function switchToDatabase(): void
-    {
-        $this->databaseSwitcher->switchDatabase();
+        $this->roleCheckerService = $roleCheckerService;
     }
 
     private function form(
@@ -61,7 +60,15 @@ final class PersonneController extends AbstractController
     #[Route('/', name: 'app_personne_index', methods: ['POST', 'GET'])]
     public function index(Request $request): Response
     {
-        $this->switchToDatabase();
+        // Vérifier les rôles via le service
+        $requiredRoles = ['ROLE_SUPERVISEUR','ROLE_AGENT', 'ROLE_ADMIN'];
+        $roleCheck = $this->roleCheckerService->checkUserRolesWithResponse($request, $requiredRoles);
+        // Si le résultat est une JsonResponse, retourner l'erreur
+        if ($roleCheck instanceof JsonResponse) {
+            return $roleCheck;
+        }
+        $databasename = $roleCheck['database_name'];
+        $this->databaseSwitcher->switchDatabase($databasename);
         $entityManager = $this->dynamicEntityManagerProvider->getEntityManager();
 
         $p_eActif = $request->query->get('__eActif', 1);
@@ -80,7 +87,15 @@ final class PersonneController extends AbstractController
     #[Route('/new', name:"app_personne_new", methods:["POST", "GET"])]
     public function new(Request $request):Response 
     {
-        $this->switchToDatabase();
+        // Vérifier les rôles via le service
+        $requiredRoles = ['ROLE_SUPERVISEUR','ROLE_AGENT', 'ROLE_ADMIN'];
+        $roleCheck = $this->roleCheckerService->checkUserRolesWithResponse($request, $requiredRoles);
+        // Si le résultat est une JsonResponse, retourner l'erreur
+        if ($roleCheck instanceof JsonResponse) {
+            return $roleCheck;
+        }
+        $databasename = $roleCheck['database_name'];
+        $this->databaseSwitcher->switchDatabase($databasename);
         $entityManagers = $this->dynamicEntityManagerProvider->getEntityManager();
         $personne = new Personne();
 

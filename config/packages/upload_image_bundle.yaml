@@ -1,0 +1,4 @@
+upload_image:
+    documents_dir: 'E:\Mes Projets\piasako2/public/uploads/documents'
+    videos_dir: 'E:\Mes Projets\piasako2/public/uploads/videos'
+    images_dir: 'E:\Mes Projets\piasako2/public/uploads/images'

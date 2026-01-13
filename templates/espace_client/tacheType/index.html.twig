@@ -24,7 +24,7 @@
 					<div class="row">
 						<div class="col-md-9 col-sm-12">
 							<div class="card-title">
-								<h3>Tâches</h3>
+								<h3>Tâches type</h3>
 							</div>
 						</div>
 						<div class="col-md-3 col-sm-12 col-xs-12">
@@ -49,28 +49,28 @@
 						<table id="datatable-basic" class="table table-striped-danger text-nowrap w-100">
 							<thead>
 								<tr>
-									<th class="large-col text-start">Nom</th>
-									<th class="large-col text-start">Déscription</th>
-									<th class="large-col text-start">Travailleurs</th>
-									<th class="large-col text-start">Durée estimative</th>
+									<th class="large-col text-start">Libelle</th>
+									<th class="large-col text-start">Couleur</th>
+									<th class="large-col text-start">Comptabiliser</th>
+									<th class="large-col text-start">Planifiable</th>
 									<th width="10%" class="text-center custom-style-action">Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								{% for tache in taches %}
+								{% for tachetype in tachetypes %}
 									<tr>
-										<td>{{ tache.tacNom ?? "-"}}</td>
-										<td>{{ tache.tacDescription ?? "-" }}</td>
-										<td>{{ tache.tacNbtravailleurrequis ?? 0}}</td>
-										<td>{{ tache.tacDureeestimatif ?? 0 }}</td>
+										<td>{{ tachetype.ttpLibelle ?? "-"}}</td>
+										<td>{{ tachetype.ttpCouleur ?? "-" }}</td>
+										<td>{{ tachetype.ttpComptabiliser ?? false}}</td>
+										<td>{{ tachetype.ttpPlanifiable ?? false }}</td>
 										<td class="text-center">
 											<a
-                                                href="{{ path('app_espace_admin_parametrage_message_derogation_edit', {'id': message_derogation.id, 'view': '32632dfdfdf3626', 'isView': true}) }}" title="Voir" 
+                                                href="#" title="Voir" 
                                                 class="btn btn-icon btn-success-light rounded-pill btn-wave waves-effect waves-light btn-success-show">
 												<i class="ri-search-line"></i>
 											</a>
 											<a
-                                                href="{{ path('app_espace_admin_parametrage_message_derogation_edit', {'id': message_derogation.id}) }}" title="Modifier" 
+                                                href="{{path('app_tachetype_edit', {'id': tachetype.id})}}" title="Modifier" 
                                                 class="btn btn-icon btn-primary-light rounded-pill btn-wave waves-effect waves-light btn-success-show">
 												<i class="ri-pencil-line"></i>
 											</a>
@@ -122,7 +122,7 @@
                         text: '<i class="ri-add-line text-gray-5 fs-5"></i>',
                         className: 'btn  btn-light btn-wave waves-effect waves-light border border-dark ',
                         action: function () {
-                            window.location.href = "{{ path('app_tache_new') }}";
+                            window.location.href = "{{ path('app_tachetype_new') }}";
                         },
                         init: function (api, node, config) {
                         }

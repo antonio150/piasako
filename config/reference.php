@@ -1607,6 +1607,11 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     throttle_limit?: int, // Another password reset cannot be made faster than this throttle time in seconds. // Default: 3600
  *     enable_garbage_collection?: bool, // Enable/Disable automatic garbage collection. // Default: true
  * }
+ * @psalm-type UploadImageConfig = array{
+ *     documents_dir?: scalar|null, // Dossier où seront stockés les documents (PDF, DOC, XLS, CSV, etc.) // Default: "%kernel.project_dir%/public/uploads/documents"
+ *     videos_dir?: scalar|null, // Dossier où seront stockées les vidéos (MP4, AVI, MOV, etc.) // Default: "%kernel.project_dir%/public/uploads/videos"
+ *     images_dir?: scalar|null, // Dossier où seront stockées les images (JPG, PNG, GIF, etc.) // Default: "%kernel.project_dir%/public/uploads/images"
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1622,6 +1627,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     monolog?: MonologConfig,
  *     lexik_jwt_authentication?: LexikJwtAuthenticationConfig,
  *     symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *     upload_image?: UploadImageConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1640,6 +1646,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         maker?: MakerConfig,
  *         lexik_jwt_authentication?: LexikJwtAuthenticationConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         upload_image?: UploadImageConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1656,6 +1663,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         monolog?: MonologConfig,
  *         lexik_jwt_authentication?: LexikJwtAuthenticationConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         upload_image?: UploadImageConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1673,6 +1681,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         monolog?: MonologConfig,
  *         lexik_jwt_authentication?: LexikJwtAuthenticationConfig,
  *         symfonycasts_reset_password?: SymfonycastsResetPasswordConfig,
+ *         upload_image?: UploadImageConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
