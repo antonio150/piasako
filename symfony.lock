@@ -1,4 +1,7 @@
 {
+    "antonio/aitestbundle": {
+        "version": "dev-main"
+    },
     "antonio150/uploadimagebundle": {
         "version": "dev-main"
     },

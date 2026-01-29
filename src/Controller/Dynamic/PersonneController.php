@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use UploadImageBundle\Service\FileUploader;
 
 #[Route('/espaceclient/personne')]
 final class PersonneController extends AbstractController
@@ -33,7 +34,7 @@ final class PersonneController extends AbstractController
     }
 
     private function form(
-        Request $request, Personne $personne, $entityManager
+        Request $request, Personne $personne, $entityManager, FileUploader $fileUploader, $methode
     )
     {
         $isView = $request->query->get('view', false);
@@ -44,7 +45,17 @@ final class PersonneController extends AbstractController
         $form->handleRequest($request);
        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($personne);
+            $file = $form->get('photoFile')->getData();
+
+            if ($file) {
+                // Appel de TON bundle existant
+                $result = $fileUploader->upload($file);
+                $personne->setPersPhotoRelative($result['public_path']); 
+                $personne->setPersPhotoAbsolute($result['absolute_path']); 
+            }
+            if($methode === "add"){
+                $entityManager->persist($personne);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_personne_index');
@@ -85,7 +96,7 @@ final class PersonneController extends AbstractController
     }
 
     #[Route('/new', name:"app_personne_new", methods:["POST", "GET"])]
-    public function new(Request $request):Response 
+    public function new(Request $request, FileUploader $fileUploader):Response 
     {
         // Vérifier les rôles via le service
         $requiredRoles = ['ROLE_SUPERVISEUR','ROLE_AGENT', 'ROLE_ADMIN'];
@@ -98,8 +109,29 @@ final class PersonneController extends AbstractController
         $this->databaseSwitcher->switchDatabase($databasename);
         $entityManagers = $this->dynamicEntityManagerProvider->getEntityManager();
         $personne = new Personne();
+        $methode="add";
+        return $this->form($request, $personne, $entityManagers, $fileUploader,$methode);
+    }
 
-        return $this->form($request, $personne, $entityManagers);
+    #[Route('/edit/{id}', name:"app_personne_edit", methods:["POST", "GET"])]
+    public function edit(Request $request,Personne $personne, FileUploader $fileUploader):Response 
+    {
+        // Vérifier les rôles via le service
+        $requiredRoles = ['ROLE_SUPERVISEUR','ROLE_AGENT', 'ROLE_ADMIN'];
+        $roleCheck = $this->roleCheckerService->checkUserRolesWithResponse($request, $requiredRoles);
+        // Si le résultat est une JsonResponse, retourner l'erreur
+        if ($roleCheck instanceof JsonResponse) {
+            return $roleCheck;
+        }
+        $databasename = $roleCheck['database_name'];
+        $this->databaseSwitcher->switchDatabase($databasename);
+        $entityManagers = $this->dynamicEntityManagerProvider->getEntityManager();
+        $personne = $entityManagers
+            ->getRepository(Personne::class)
+            ->find($personne->getId());
+        $methode="edit";
+      
+        return $this->form($request, $personne, $entityManagers, $fileUploader,$methode);
     }
 
 

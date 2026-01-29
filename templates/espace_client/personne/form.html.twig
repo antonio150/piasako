@@ -89,16 +89,29 @@
                     <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-md-12 mb-3">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.photoFile, 'Image', {'label_attr': {'class': 'mb-2'}}) }}
+                                        {{ form_widget(form.photoFile, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
+                                        {{ form_errors(form.photoFile) }}
+
+                                        {% if personne.persPhotoRelative %}
+                                            <div class="mt-3">
+                                                <img id="existingPhoto" src="{{ asset(personne.persPhotoRelative) }}"
+                                                    alt="Photo"
+                                                    style="max-width: 180px; max-height: 180px; border-radius: 6px; border: 1px solid #ddd;">
+                                                
+                                            </div>
+                                        {% endif %}
+                                        <img id="preview" style="display:none;max-width:180px;margin-top:10px;border-radius:6px;border:1px solid #ddd;">
+
+                                    </div>
+                                    <div class="col-md-6 mb-3">
                                         {{ form_label(form.persNom, 'Nom', {'label_attr': {'class': 'mb-2'}}) }}
                                         {{ form_widget(form.persNom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
                                         {{ form_errors(form.persNom) }}
                                     </div>
                                 </div>
                                 <div class="row">
-                                   
-                                    
-                                
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.persPrenom, 'Prénom', {'label_attr': {'class': 'mb-2'}}) }}
                                         {{ form_widget(form.persPrenom, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
@@ -123,19 +136,12 @@
                                     </div>
                                 </div>
                                 <div class="row">
-
-                                   
                                     <div class="col-md-6 mb-3">
                                         {{ form_label(form.persSex, 'Sexe', {'label_attr': {'class': 'mb-2'}}) }}
                                         {{ form_widget(form.persSex, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
                                         {{ form_errors(form.persSex) }}
                                     </div>
 
-                                    <div class="col-md-6 mb-3">
-                                        {{ form_label(form.idProfil, 'Profil', {'label_attr': {'class': 'mb-2'}}) }}
-                                        {{ form_widget(form.idProfil, {'attr': {'class': 'form-control custom-form-control', 'disabled': isView ? true : false}}) }}
-                                        {{ form_errors(form.idProfil) }}
-                                    </div>
                                 </div>
                                
                                 <div class="row">
@@ -185,5 +191,25 @@
         });
     </script>
 
-    
+    <script>
+        const input = document.getElementById('{{ form.photoFile.vars.id }}');
+        const preview = document.getElementById('preview');
+        const existing = document.getElementById('existingPhoto');
+
+        input.addEventListener('change', function () {
+            const [file] = this.files;
+
+            if (file) {
+                // afficher la nouvelle image
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+
+                // cacher l’ancienne image s’il y en a une
+                if (existing) {
+                    existing.style.display = 'none';
+                }
+            }
+        });
+    </script>
+
 {% endblock %}

@@ -57,10 +57,6 @@ class Personne
     #[ORM\Column(name: 'PERS_Matricule', type: 'string', length: 50, nullable: true)]
     private ?string $persMatricule;
 
-    #[ORM\ManyToOne(targetEntity: FileStock::class, inversedBy: 'personnesWithBadge', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'badge_id', referencedColumnName: 'id', nullable: true)]
-    private ?FileStock $persBadge = null;
-
     #[ORM\Column(name: 'PERS_Contact', type: 'string', length: 50, nullable: true)]
     private ?string $persContact = null;
 
@@ -81,7 +77,7 @@ class Personne
     private ?Utilisateur $usercreation;
 
     #[ORM\Column(name: 'PERS_Actif', type: 'boolean', nullable: true)]
-    private bool $estActif = false;
+    private bool $estActif = true;
 
     #[ORM\Column(name: 'PERS_DateEmbauche', type: 'date', nullable: true)]
     private ?\DateTimeInterface $persDateembauche;
@@ -91,10 +87,6 @@ class Personne
 
     #[ORM\Column(name: 'PERS_Sex', enumType: Sex::class, nullable: true)]
     private ?Sex $persSex;
-
-    #[ORM\ManyToOne(targetEntity: Profil::class)]
-    #[ORM\JoinColumn(name: 'ID_Profil', referencedColumnName: 'ID_Profil', nullable: true)]
-    private ?Profil $idProfil = null;
 
     #[ORM\OneToOne(mappedBy: 'personne', targetEntity: Utilisateur::class, cascade: ['remove'])]
     private ?Utilisateur $utilisateur = null;
@@ -121,10 +113,7 @@ class Personne
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: FileStock::class, inversedBy: 'personnesWithPhoto', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: true)]
-     private ?FileStock $persPhoto = null;
-
+   
     #[ORM\OneToMany(mappedBy: 'personne', targetEntity: Notification::class)]
     private Collection $notifications;
 
@@ -133,6 +122,12 @@ class Personne
 
     #[ORM\Column(name: 'PERS_Num_CIN', type: 'string', length: 50, nullable: true)]
     private ?string $persNumCIN;
+
+    #[ORM\Column(type: 'string',nullable: true)]
+    private ?string $persPhotoRelative;
+
+    #[ORM\Column(type: 'string',nullable: true)]
+    private ?string $persPhotoAbsolute;
 
     #[ORM\Column(type: 'boolean')]
     private bool $temporary = true;
@@ -150,15 +145,7 @@ class Personne
         $this->tokenDevices = [];
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-
-  
-    public function getPersPhotoString(): ?string {
-        return $this->getPersPhoto()?->getPath();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
+   
     public function getId(): ?string
     {
         return $this->id;
@@ -197,17 +184,7 @@ class Personne
         return $this;
     }
 
-    public function getPersBadge(): ?FileStock
-    {
-        return $this->persBadge;
-    }
-
-    public function setPersBadge(?FileStock $persBadge): self
-    {
-        $this->persBadge = $persBadge;
-        return $this;
-    }
-
+  
     public function getPersContact(): ?string
     {
         return $this->persContact;
@@ -318,16 +295,7 @@ class Personne
         return $this;
     }
 
-    public function getIdProfil(): ?\App\Entity\Dynamic\Profil
-    {
-        return $this->idProfil;
-    }
-
-    public function setIdProfil(?\App\Entity\Dynamic\Profil $idProfil): self
-    {
-        $this->idProfil = $idProfil;
-        return $this;
-    }
+   
 
     public function getPointages(): Collection
     {
@@ -465,18 +433,27 @@ class Personne
         return $this;
     }
 
-    public function getPersPhoto(): ?FileStock
+    public function getPersPhotoRelative(): ?String
     {
-        return $this->persPhoto;
+        return $this->persPhotoRelative;
     }
 
-    public function setPersPhoto(?FileStock $persPhoto): self
+    public function setPersPhotoRelative(?String $persPhotoRelative): self
     {
-        $this->persPhoto = $persPhoto;
+        $this->persPhotoRelative = $persPhotoRelative;
         return $this;
     }
 
-    
+    public function getPersPhotoAbsolute(): ?String
+    {
+        return $this->persPhotoAbsolute;
+    }
+
+    public function setPersPhotoAbsolute(?String $persPhotoAbsolute): self
+    {
+        $this->persPhotoAbsolute = $persPhotoAbsolute;
+        return $this;
+    }
 
     public function getNotifications(): Collection
     {

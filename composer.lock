@@ -4,8 +4,43 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4c2d291a7941475d86f6c46c5c11d49",
+    "content-hash": "e02569e778b280eb16cfa22cde4f6267",
     "packages": [
+        {
+            "name": "antonio/aitestbundle",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antonio150/AiTestBundle.git",
+                "reference": "67ac3e3e12958f19c0bcf7420a12cff05806f158"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antonio150/AiTestBundle/zipball/67ac3e3e12958f19c0bcf7420a12cff05806f158",
+                "reference": "67ac3e3e12958f19c0bcf7420a12cff05806f158",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/framework-bundle": "^7.0"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "AiTestBundle\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Bundle Symfony pour générer et exécuter des tests automatiquement sur les controllers",
+            "support": {
+                "source": "https://github.com/antonio150/AiTestBundle/tree/main",
+                "issues": "https://github.com/antonio150/AiTestBundle/issues"
+            },
+            "time": "2026-01-29T14:23:41+00:00"
+        },
         {
             "name": "antonio150/uploadimagebundle",
             "version": "dev-main",
@@ -10769,6 +10804,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "antonio/aitestbundle": 20,
         "antonio150/uploadimagebundle": 20
     },
     "prefer-stable": true,

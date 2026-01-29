@@ -15,11 +15,13 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\File;
 
 class PersonneForm extends AbstractType
 {
@@ -76,7 +78,17 @@ class PersonneForm extends AbstractType
                     new Length(['max' => 30]),
                 ],
             ])
-           
+            ->add('photoFile', FileType::class, [
+                'label' => 'Photo',
+                'mapped' => false,    
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => ['image/jpeg','image/png','image/webp'],
+                    ])
+                ]
+            ])
             // nouveaux champs demandés
             ->add('persNumBadge', TextType::class, [
                 'label' => 'Numéro badge',
@@ -91,18 +103,7 @@ class PersonneForm extends AbstractType
                 'placeholder' => 'Sélectionnez',
                 'attr' => ['class' => 'form-control custom-form-control', 'disabled' => $options['disabled']],
             ])
-            ->add('idProfil', EntityType::class, [
-                'class' => Profil::class,
-                'choice_label' => function ($profil) { return (string) $profil; }, // utilise __toString si présent
-                'placeholder' => 'Sélectionnez un profil',
-                'required' => false,
-                'query_builder' => function (EntityRepository $er) {
-                    $dynamicEm = $this->dynamicEntityManagerProvider->getEntityManager();
-                    $repo = $dynamicEm->getRepository(Profil::class);
-                    return $repo->createQueryBuilder('p')->orderBy('p.idProfil', 'ASC');
-                },
-                'attr' => ['class' => 'form-control custom-form-control', 'disabled' => $options['disabled']],
-            ])
+           
             ->add('persNumCIN', TextType::class, [
                 'label' => 'Numéro CIN',
                 'required' => false,
